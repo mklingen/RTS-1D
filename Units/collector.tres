@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://c5ategvaqwiwn"]
+
+[ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_xu0p0"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uecsj"]
+radius = 0.25
+
+[resource]
+script = ExtResource("1_xu0p0")
+Name = "Resource Collector"
+MaxSpeed = 0.5
+MaxHealth = 25.0
+Armor = 0.0
+SensingShape = SubResource("SphereShape3D_uecsj")
+SensingCollisionMask = 1
+PrefabFile = "res://Scene/Prefabs/unit_1.tscn"
+BuildTime = 10.0
+BuildCost = 1.0

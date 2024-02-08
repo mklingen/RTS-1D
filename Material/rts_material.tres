@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bvyf2lxbm40ma"]
+
+[ext_resource type="Texture2D" uid="uid://cp3lra8mmvdmw" path="res://Art/Texture/palette.png" id="1_kck7q"]
+
+[resource]
+albedo_texture = ExtResource("1_kck7q")
+metallic = 0.42
+metallic_specular = 0.62
+rim_enabled = true
+rim = 0.5
+rim_tint = 0.69

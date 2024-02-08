@@ -1,0 +1,6 @@
+[gd_resource type="GradientTexture2D" format=3 uid="uid://cydng8gyn7f53"]
+
+[resource]
+width = 12
+height = 1
+use_hdr = true

@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6pqqlj63rt2p"]
+
+[ext_resource type="Script" path="res://Scene/UI/BuildMenu.cs" id="1_rndmv"]
+
+[node name="BuildMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_rndmv")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -162.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BuildUnitPanel" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Outer" type="VBoxContainer" parent="MarginContainer/BuildUnitPanel"]
+layout_mode = 2
+
+[node name="Units" type="VBoxContainer" parent="MarginContainer/BuildUnitPanel/Outer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MainLabel" type="Label" parent="MarginContainer/BuildUnitPanel/Outer/Units"]
+layout_mode = 2
+text = "BUILD"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BuildButtons" type="HBoxContainer" parent="MarginContainer/BuildUnitPanel/Outer/Units"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BuildQueue" type="HBoxContainer" parent="MarginContainer/BuildUnitPanel/Outer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="RepeatButton" type="CheckButton" parent="MarginContainer/BuildUnitPanel"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+tooltip_text = "Activate to repeatedly build the same thing forever."
+text = "Repeat Build"

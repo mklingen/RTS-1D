@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bylr8aa5fy8da"]
+
+[ext_resource type="PackedScene" uid="uid://cyc5ho4qy36ix" path="res://Art/Mesh/miner.glb" id="1_ohkc7"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_xr31y"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_hfx1p"]
+
+[node name="miner" instance=ExtResource("1_ohkc7")]
+
+[node name="Miner" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_xr31y")
+surface_material_override/1 = ExtResource("3_hfx1p")

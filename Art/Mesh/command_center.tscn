@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://d13w3q347slhq"]
+
+[ext_resource type="PackedScene" uid="uid://bljw88y6ho6rb" path="res://Art/Mesh/command_center.glb" id="1_h08ds"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_h8gt4"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_yupon"]
+
+[node name="command_center" instance=ExtResource("1_h08ds")]
+
+[node name="Command Center" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_h8gt4")
+surface_material_override/1 = ExtResource("3_yupon")

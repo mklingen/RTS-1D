@@ -1,0 +1,217 @@
+[gd_scene load_steps=27 format=3 uid="uid://dbfq55rp55g0j"]
+
+[ext_resource type="Script" path="res://Script/Game.cs" id="1_ddooy"]
+[ext_resource type="Script" path="res://Script/Planet.cs" id="2_r1u44"]
+[ext_resource type="Script" path="res://Script/MainCamera.cs" id="3_hkogh"]
+[ext_resource type="Script" path="res://Script/StructurePlacement.cs" id="4_2yueu"]
+[ext_resource type="PackedScene" uid="uid://d0m0iao611kn8" path="res://Scene/UI/main_ui.tscn" id="5_jpid0"]
+[ext_resource type="Script" path="res://Script/MoveSelectTool.cs" id="5_t1h80"]
+[ext_resource type="PackedScene" uid="uid://do5808am1angg" path="res://Scene/Prefabs/go_to_gizmo.tscn" id="6_275rd"]
+[ext_resource type="PackedScene" uid="uid://crugiqpv1b15t" path="res://Scene/Prefabs/building_1.tscn" id="7_gan5y"]
+[ext_resource type="Script" path="res://Script/ResourceField.cs" id="9_mesx2"]
+[ext_resource type="Script" path="res://Script/StructureCursor.cs" id="10_xw7p0"]
+[ext_resource type="PackedScene" uid="uid://cfknavkpg6nb7" path="res://Scene/Prefabs/resource_collector_1.tscn" id="12_fx8w5"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_gv2nd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rcsuf"]
+albedo_color = Color(0, 0.858824, 0.592157, 1)
+metallic = 0.56
+metallic_specular = 0.6
+roughness = 0.76
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_64nrg"]
+plane = Plane(0, 0, 1, 0)
+
+[sub_resource type="Curve" id="Curve_h5o0r"]
+_data = [Vector2(0.00200401, 0.0631579), 0.0, 0.0, 0, 0, Vector2(0.501002, 1), 0.0, 0.0, 0, 0, Vector2(0.996994, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2pba5"]
+sky_top_color = Color(0.0352941, 0.435294, 0.862745, 1)
+sky_horizon_color = Color(1, 1, 1, 1)
+ground_bottom_color = Color(0, 0, 1, 1)
+ground_horizon_color = Color(0, 0, 1, 1)
+ground_curve = 4.61441
+sun_angle_max = 40.77
+
+[sub_resource type="Sky" id="Sky_5e8g3"]
+sky_material = SubResource("ProceduralSkyMaterial_2pba5")
+
+[sub_resource type="Environment" id="Environment_cey1v"]
+background_mode = 1
+background_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+sky = SubResource("Sky_5e8g3")
+ambient_light_source = 2
+ambient_light_color = Color(0.254902, 0.321569, 0.631373, 1)
+tonemap_mode = 1
+tonemap_exposure = 2.87
+tonemap_white = 3.77
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mjtb3"]
+albedo_color = Color(1, 1, 0, 1)
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.66
+
+[sub_resource type="BoxMesh" id="BoxMesh_oa7x1"]
+material = SubResource("StandardMaterial3D_mjtb3")
+size = Vector3(0.01, 0.01, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_uajvk"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_a0w41"]
+transform_format = 1
+instance_count = 128
+mesh = SubResource("BoxMesh_uajvk")
+buffer = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f11lv"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sl2en"]
+material = SubResource("StandardMaterial3D_f11lv")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o6poj"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0.529412, 0.603922, 1, 0.721569)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8cfwr"]
+
+[node name="main" type="Node3D"]
+script = ExtResource("1_ddooy")
+
+[node name="Planet" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_gv2nd")
+surface_material_override/0 = SubResource("StandardMaterial3D_rcsuf")
+script = ExtResource("2_r1u44")
+Radius = 0.5
+
+[node name="Planet" type="MeshInstance3D" parent="Planet"]
+mesh = SubResource("SphereMesh_gv2nd")
+surface_material_override/0 = SubResource("StandardMaterial3D_rcsuf")
+script = ExtResource("2_r1u44")
+Radius = 0.5
+
+[node name="MouseSelectionPlane" type="StaticBody3D" parent="Planet/Planet"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/Planet/MouseSelectionPlane"]
+shape = SubResource("WorldBoundaryShape3D_64nrg")
+
+[node name="Lighting" type="Node3D" parent="."]
+transform = Transform3D(0.0665177, 0.558647, -0.826734, 1.09294e-08, 0.828569, 0.559887, 0.997785, -0.0372424, 0.0551145, 0, 0, 0)
+
+[node name="Sun" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.631001, -0.275409, 0.72525, 0.43435, 0.900019, -0.0361276, -0.642789, 0.337809, 0.687537, 0, 0, 0)
+shadow_enabled = true
+shadow_normal_bias = 0.5
+shadow_opacity = 0.5
+shadow_blur = 0.5
+directional_shadow_mode = 0
+directional_shadow_fade_start = 1.0
+directional_shadow_max_distance = 1.3
+directional_shadow_pancake_size = 1.0
+
+[node name="Backlight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-0.794026, 0.146858, -0.589879, 0.161796, 0.986433, 0.0277937, 0.585957, -0.0733709, -0.807013, 0, 0, 0)
+light_color = Color(0, 0.490196, 0.494118, 1)
+light_energy = 0.15
+
+[node name="Player" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
+fov = 45.0
+near = 0.15
+far = 3.0
+script = ExtResource("3_hkogh")
+mouseSelectionMask = 2
+playerTeam = null
+
+[node name="StructureBuilder" type="Node" parent="Player"]
+script = ExtResource("4_2yueu")
+structureCursor = null
+
+[node name="MoveSelectTool" type="Node" parent="Player"]
+script = ExtResource("5_t1h80")
+goToGizmoPop = SubResource("Curve_h5o0r")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cey1v")
+
+[node name="ResourceField" type="Node3D" parent="."]
+transform = Transform3D(0.470734, -0.881366, -0.0400196, 0.871615, 0.471598, -0.133727, 0.136736, 0.0280683, 0.99021, -0.438472, 0.240133, 0.0200108)
+script = ExtResource("9_mesx2")
+MaxResources = 50.0
+resourceMoteMesh = SubResource("BoxMesh_oa7x1")
+projectionRadius = null
+maxNumMotes = 16
+minMoteScale = 0.5
+maxMoteScale = 1.0
+Height = null
+Depth = null
+GlobalVelocity = null
+setNominalHeightOnStart = null
+OrientMode = null
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="ResourceField"]
+multimesh = SubResource("MultiMesh_a0w41")
+
+[node name="Base2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.993918, 0.031974, 0.10538, -0.0254809, 0.997726, -0.0623964, -0.107136, 0.0593317, 0.992473, 0.0338174, -0.5366, -0.0484378)
+mesh = SubResource("BoxMesh_sl2en")
+skeleton = NodePath("")
+
+[node name="Base3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.240672, -0.0608281, 0.0296165, 0.0562349, 0.240706, 0.0373949, -0.0376141, -0.0293376, 0.245407, 0.20369, -0.441386, 0.141059)
+mesh = SubResource("BoxMesh_sl2en")
+skeleton = NodePath("")
+
+[node name="MainUI" parent="." instance=ExtResource("5_jpid0")]
+PlayerTeam = null
+
+[node name="GoToGizmo" parent="." instance=ExtResource("6_275rd")]
+Height = null
+Depth = null
+GlobalVelocity = null
+setNominalHeightOnStart = null
+OrientMode = null
+
+[node name="Building1" parent="." instance=ExtResource("7_gan5y")]
+transform = Transform3D(0.99909, 0.0426429, 0, -0.0426429, 0.99909, 0, 0, 0, 1, 0.0247538, 0.490142, -0.0680378)
+targetDistanceThreshold = null
+state = null
+Team = null
+Height = null
+Depth = null
+GlobalVelocity = null
+setNominalHeightOnStart = null
+OrientMode = null
+
+[node name="ResourceCollector" parent="." instance=ExtResource("12_fx8w5")]
+transform = Transform3D(0.179317, -0.198105, 0.963639, -3.72529e-09, 0.979516, 0.201369, -0.983791, -0.0361089, 0.175644, -0.0720533, 0.503519, 0.0507374)
+targetDistanceThreshold = null
+state = null
+Team = null
+Height = null
+Depth = null
+GlobalVelocity = null
+setNominalHeightOnStart = null
+OrientMode = null
+
+[node name="StructureBlueprint" type="Node3D" parent="."]
+script = ExtResource("10_xw7p0")
+blueprintMaterial = SubResource("StandardMaterial3D_o6poj")
+Height = null
+Depth = null
+GlobalVelocity = null
+setNominalHeightOnStart = null
+OrientMode = 1
+
+[node name="StructureMesh" type="MeshInstance3D" parent="StructureBlueprint"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+mesh = SubResource("BoxMesh_8cfwr")

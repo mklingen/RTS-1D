@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsbi01qhabix5"]
+
+[ext_resource type="Script" path="res://Scene/UI/QueueItem.cs" id="1_itbjx"]
+[ext_resource type="Texture2D" uid="uid://du3ocaqqiid6r" path="res://icon.svg" id="1_lo7f6"]
+
+[node name="QueueItem" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_itbjx")
+
+[node name="ButtonAndBar" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="CancelButton" type="Button" parent="ButtonAndBar"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+icon = ExtResource("1_lo7f6")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ProgressBar" type="ProgressBar" parent="ButtonAndBar"]
+layout_mode = 2
+size_flags_vertical = 1
+step = 1.0
+value = 50.0
+rounded = true
+show_percentage = false

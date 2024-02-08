@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmg3gmccpt5rr"]
+
+[ext_resource type="Script" path="res://Script/Bullet.cs" id="1_gpo7r"]
+[ext_resource type="PackedScene" uid="uid://wv7gdssmxnrl" path="res://Scene/Prefabs/small_explosion.tscn" id="2_n3kud"]
+
+[sub_resource type="Curve" id="Curve_bievm"]
+_data = [Vector2(0, 0), 0.0, 3.14, 0, 0, Vector2(0.5, 1), -9.21507e-07, -9.21507e-07, 0, 0, Vector2(1, 0), -3.14, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_fiw08"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xvuuq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r0hgl"]
+albedo_color = Color(1, 1, 0.109804, 1)
+emission_enabled = true
+emission = Color(1, 0.811765, 0.243137, 1)
+emission_energy_multiplier = 4.0
+
+[node name="TankBullet" type="Node3D"]
+script = ExtResource("1_gpo7r")
+BulletSpeed = 0.5
+ExplosionPrefab = ExtResource("2_n3kud")
+heightCurve = SubResource("Curve_bievm")
+distCurve = SubResource("Curve_fiw08")
+arcAmount = 1.57
+
+[node name="BulletMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.003, 0, 0, 0, -3.93402e-10, -0.003, 0, 0.009, -1.31134e-10, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_xvuuq")
+surface_material_override/0 = SubResource("StandardMaterial3D_r0hgl")

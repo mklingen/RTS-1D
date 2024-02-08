@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://wv7gdssmxnrl"]
+
+[ext_resource type="Script" path="res://Script/DieAfterTimer.cs" id="1_lyqti"]
+[ext_resource type="Script" path="res://Script/ExplosionParticles.cs" id="2_w56e5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3y787"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_euq2c"]
+
+[sub_resource type="Curve" id="Curve_j4txv"]
+_data = [Vector2(0.00513347, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_sndh0"]
+offsets = PackedFloat32Array(0.134677, 0.481442, 0.753977, 1)
+colors = PackedColorArray(1, 1, 0.054902, 1, 1, 0.45, 0, 1, 0.45098, 0.0627451, 0.00784314, 1, 0, 0, 0, 1)
+
+[node name="small_explosion" type="Node3D"]
+script = ExtResource("1_lyqti")
+lifeTime = 0.25
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_3y787")
+transparency = 0.5
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.25
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 1.0
+local_coords = true
+mesh = SubResource("SphereMesh_euq2c")
+emission_shape = 1
+emission_sphere_radius = 0.1
+direction = Vector3(0, 0, -1)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_max = 0.5
+damping_min = 0.5
+damping_max = 1.0
+scale_amount_min = 0.1
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_j4txv")
+color_ramp = SubResource("Gradient_sndh0")
+script = ExtResource("2_w56e5")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.709804, 0.129412, 1)
+light_energy = 0.05
+light_specular = 0.0
+omni_range = 0.15

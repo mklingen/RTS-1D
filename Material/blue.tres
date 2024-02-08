@@ -1,0 +1,7 @@
+[gd_resource type="BoxMesh" load_steps=2 format=3 uid="uid://byrigp2ak3f8t"]
+
+[ext_resource type="Material" uid="uid://dhvwgjyqif0bt" path="res://Material/blue_shader.tres" id="1_26sv5"]
+
+[resource]
+material = ExtResource("1_26sv5")
+size = Vector3(0.01, 0.01, 0.01)

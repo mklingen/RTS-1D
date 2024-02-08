@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0m0iao611kn8"]
+
+[ext_resource type="Script" path="res://Scene/UI/MainUI.cs" id="1_moeis"]
+[ext_resource type="PackedScene" uid="uid://c6pqqlj63rt2p" path="res://Scene/UI/build_menu.tscn" id="2_qp3th"]
+[ext_resource type="PackedScene" uid="uid://dsbi01qhabix5" path="res://Scene/UI/queue_item.tscn" id="3_70guj"]
+[ext_resource type="PackedScene" uid="uid://bn4cvn1a4pnl1" path="res://Scene/UI/build_unit_icon.tscn" id="4_7g77u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_81fan"]
+bg_color = Color(0.423529, 0.811765, 1, 0.176471)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MainUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 8
+script = ExtResource("1_moeis")
+
+[node name="SelectionRect" type="Panel" parent="."]
+visible = false
+layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_81fan")
+
+[node name="BuildMenu" parent="." instance=ExtResource("2_qp3th")]
+custom_minimum_size = Vector2(128, 256)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+grow_vertical = 0
+QueueItemPrefab = ExtResource("3_70guj")
+BuildButtonPrefab = ExtResource("4_7g77u")
+
+[node name="Resources" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ResourcesLabel" type="Label" parent="Resources"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+tooltip_text = "Number of resources available."
+text = "Resources {0}RP"
+vertical_alignment = 1

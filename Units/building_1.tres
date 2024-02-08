@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dfkemlndu2q2m"]
+
+[ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_ok32y"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uecsj"]
+radius = 0.25
+
+[resource]
+script = ExtResource("1_ok32y")
+Name = "Command Center"
+MaxSpeed = 0.0
+MaxHealth = 200.0
+Armor = 1.0
+SensingShape = SubResource("SphereShape3D_uecsj")
+SensingCollisionMask = 1
+PrefabFile = "res://Scene/Prefabs/unit_1.tscn"
+BuildTime = null
+BuildCost = null

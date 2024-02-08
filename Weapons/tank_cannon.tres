@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bel7fh675uqvi"]
+
+[ext_resource type="Script" path="res://Script/WeaponStats.cs" id="1_177bt"]
+[ext_resource type="PackedScene" uid="uid://cmg3gmccpt5rr" path="res://Scene/Prefabs/tank_bullet.tscn" id="1_igo54"]
+
+[resource]
+script = ExtResource("1_177bt")
+Name = "Tank Cannon"
+DamagePerShot = 10.0
+ArmorPiercing = 1.0
+ShotTime = 1.0
+MaxRange = 0.5
+MinRange = 0.05
+BulletPrefab = ExtResource("1_igo54")

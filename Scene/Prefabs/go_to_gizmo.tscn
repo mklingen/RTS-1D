@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://do5808am1angg"]
+
+[ext_resource type="Script" path="res://Script/PlanetObject.cs" id="1_e8ypw"]
+[ext_resource type="Script" path="res://Script/TransformPopper.cs" id="2_1rwal"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8rcdy"]
+transparency = 1
+depth_draw_mode = 1
+no_depth_test = true
+shading_mode = 2
+diffuse_mode = 3
+metallic_specular = 0.0
+roughness = 0.0
+emission_enabled = true
+emission = Color(0, 0.631373, 0.972549, 1)
+emission_energy_multiplier = 14.0
+disable_receive_shadows = true
+
+[sub_resource type="PrismMesh" id="PrismMesh_16wc1"]
+
+[sub_resource type="Curve" id="Curve_xbvti"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.816222, 1), 4.10105, 4.10105, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_e75x6"]
+_data = [Vector2(0.00205339, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="GoToGizmo" type="Node3D"]
+transform = Transform3D(0.952736, 0.302181, -0.031318, -0.3038, 0.94766, -0.0982153, 2.79306e-09, 0.103088, 0.994672, 0.12284, 0.479116, 0.0631465)
+script = ExtResource("1_e8ypw")
+
+[node name="GoToMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(4.37114e-10, -3.82137e-17, 0.01, -8.74228e-10, -0.01, 0, 0.01, -8.74228e-10, -4.37114e-10, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_8rcdy")
+cast_shadow = 0
+mesh = SubResource("PrismMesh_16wc1")
+skeleton = NodePath("../..")
+script = ExtResource("2_1rwal")
+popInCurve = SubResource("Curve_xbvti")
+popInTime = 0.25
+popOutCurve = SubResource("Curve_e75x6")
+popOutTime = 0.25
+stayTime = 0.25

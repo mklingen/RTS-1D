@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://d0i7u3vbldq4k"]
+
+[ext_resource type="PackedScene" uid="uid://bi4xfifxq73ae" path="res://Art/Mesh/tank_body.glb" id="1_hvxyj"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_so16o"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_3kgg3"]
+
+[node name="tank_body" instance=ExtResource("1_hvxyj")]
+
+[node name="TankBody" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_so16o")
+surface_material_override/1 = ExtResource("3_3kgg3")

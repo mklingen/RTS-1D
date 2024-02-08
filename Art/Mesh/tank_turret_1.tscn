@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3bwo18wnsuhp"]
+
+[ext_resource type="PackedScene" uid="uid://cxlnf5jy7vbsd" path="res://Art/Mesh/tank_turret_1.glb" id="1_o2oit"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_r3c8l"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_vknxj"]
+
+[node name="tank_turret_1" instance=ExtResource("1_o2oit")]
+
+[node name="TankTurret1" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_r3c8l")
+surface_material_override/1 = ExtResource("3_vknxj")
