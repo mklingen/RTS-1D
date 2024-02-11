@@ -41,6 +41,7 @@ radius = 0.0501912
 [node name="Building1" type="Node3D"]
 script = ExtResource("1_5sj78")
 Stats = ExtResource("2_8anfg")
+OrientMode = 1
 
 [node name="Selection" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0624425, 0)
@@ -75,13 +76,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0498688, 0)
 shape = SubResource("CylinderShape3D_weftb")
 
 [node name="BuildBay" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.1016e-09, 0.0155791, 0.0953237)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.46302e-09, 0.0155791, 0.0137746)
 script = ExtResource("6_5588d")
 availableUnits = [ExtResource("7_2reu2"), ExtResource("8_rwyxw"), ExtResource("9_owtk4")]
 BuildMenuName = "Command Center"
 
 [node name="ResourceDropOff" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0160794, 0.0660626)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0913248, 0.0160794, -0.0144713)
 script = ExtResource("9_fh1c3")
 
 [node name="command_center" parent="." instance=ExtResource("10_5iapf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0125493, -0.0709168)

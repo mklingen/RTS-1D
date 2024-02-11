@@ -8,14 +8,18 @@ public partial class StructureCursor : PlanetObject
     [ExportGroup("Materials")]
     [Export]
     private BaseMaterial3D blueprintMaterial;
-    private MeshInstance3D mesh;
+
+    [ExportGroup("Prefabs")]
+    [Export(PropertyHint.File, "*.tscn")]
+    private string startingPrefab = "";
+    
+    private Node3D childPrefab = null;
 
     public override void _Ready()
     {
         base._Ready();
-        mesh = Game.FindChildrenRecursive<MeshInstance3D>(this).FirstOrDefault();
-        for (int k = 0; k < mesh.GetSurfaceOverrideMaterialCount(); k++) {
-            mesh.SetSurfaceOverrideMaterial(0, blueprintMaterial);
+        if (!string.IsNullOrEmpty(startingPrefab)) {
+            SetPrefab(startingPrefab);
         }
     }
 
@@ -24,12 +28,38 @@ public partial class StructureCursor : PlanetObject
         blueprintMaterial.AlbedoColor = color;
     }
 
-    public void SetMesh(Mesh newMesh)
+    public void SetPrefab(string newPrefab)
     {
-        mesh.Mesh = newMesh;
-        for (int k = 0; k < mesh.GetSurfaceOverrideMaterialCount(); k++) {
-            mesh.SetSurfaceOverrideMaterial(0, blueprintMaterial);
+        if (childPrefab != null) {
+            childPrefab.QueueFree();
         }
+        childPrefab = CreatePrefabChild(newPrefab);
+        SetMaterials();
+    }
+
+
+    private void SetMaterials()
+    {
+        if (childPrefab == null) {
+            return;
+        }
+        foreach (var mesh in Game.FindChildrenRecursive<MeshInstance3D>(childPrefab)) {
+            for(int k = 0; k < mesh.GetSurfaceOverrideMaterialCount(); k++) {
+                mesh.SetSurfaceOverrideMaterial(k, blueprintMaterial);
+            }
+        }
+    }
+
+    private Node3D CreatePrefabChild(string currentPrefab)
+    {
+        PackedScene scene = (PackedScene)ResourceLoader.Load(currentPrefab);
+        var node = scene.Instantiate<Node3D>();
+        if (node == null) {
+            GD.PrintErr("Scene did not contain node3d as root.");
+            return null;
+        }
+        this.AddChild(node);
+        return node;
     }
 
 }

@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 public partial class Planet : MeshInstance3D
 {
@@ -80,6 +82,161 @@ public partial class Planet : MeshInstance3D
             In = In,
             Out = Out
         };
+    }
+
+    // Represents a modular grid of type T, which has moudlar (wraparound) characteristics.
+    public class Grid<T>
+    {
+        // Flat array of cells.
+        protected T[] Cells;
+
+        public Grid(int numCells)
+        {
+            Cells = new T[numCells];
+        }
+
+        public void Clear(T value)
+        {
+            for (int k = 0; k < Cells.Length; k++) {
+                Cells[k] = value;
+            }
+        }
+
+        // Gets the cell at the given index.
+        public T Get(int idx)
+        {
+            return Cells[idx % Cells.Length];
+        }
+
+        // Sets the cell at the given index.
+        public void Set(int idx, T cell)
+        {
+            Cells[idx % Cells.Length] = cell;
+        }
+
+        // Indexing operator.
+        public T this[int idx]
+        {
+            get { return Get(idx); }
+            set { Set(idx, value); }
+        }
+
+        // Gets the cells adjacent to the given index.
+        public IEnumerable<T> GetAdjacent(int idx, int count=1)
+        {
+            for (int k = -count; k <= count; k++) {
+                if (k != 0) {
+                    yield return Get(idx + k);
+                }
+            }
+        }
+
+    }
+
+    // A modular grid that indexes via angle (or x, y).
+    public class AngleGrid<T> : Grid<T>
+    {
+        // Size of the grid cells in angle (radians).
+        private float AngularResolution = 1.0f;
+        public AngleGrid(float angularResolution) : base((int)((Mathf.Pi * 2.0f) / angularResolution))
+        {
+            AngularResolution = angularResolution;
+        }
+
+        // Gets the index a the x, y coordinate.
+        public int IndexOf(float x, float y)
+        {           
+            // -PI to PI.
+            float wrapped = Mathf.Atan2(y, x);
+            // Rewrap from 0 to 2PI, then divide.
+            return (int)((wrapped + Mathf.Pi) / AngularResolution);
+
+        }
+
+        // Index of the given angle (radians).
+        public int IndexOf(float angle)
+        {
+            float x = Mathf.Cos(angle);
+            float y = Mathf.Sin(angle);
+            return IndexOf(x, y);
+        }
+
+        // Angle at the center of the cell at the given index.
+        public float AngleOf(int index)
+        {
+            // Angle is ambiguous over the range of indices, so return the angle that is half way through the angular grid cell.
+            return index * AngularResolution + AngularResolution * 0.5f;
+        }
+
+
+        // Get the cell at the given x, y coordinate.
+        public T Get(float x, float y)
+        {
+            return Get(IndexOf(x, y));
+        }
+
+        // Get the cells adjacent to the given x, y coordinate.
+        public IEnumerable<T> GetAdjacent(float x, float y, int count=2)
+        {
+            int idx = IndexOf(x, y);
+            foreach (T adj in GetAdjacent(idx, count)) {
+                yield return adj;
+            }
+        }
+
+        // Gets all the indices adjacent to the given x, y, coordinate.
+        public IEnumerable<int> GetAdjacentIndices(float x, float y, int count=2, bool includeCenter=false)
+        {
+            int idx = IndexOf(x, y);
+            for(int k = -count; k <= count; k++) {
+                if (includeCenter || k != 0) {
+                    yield return idx + k;
+                }
+            }
+        }
+    }
+
+
+    [ExportGroup("Grids")]
+    [Export] private float buildingPlacementResolutionDegrees = 5;
+    public AngleGrid<OccupancyCell> BuildingOccupancyGrid;
+
+
+
+    public struct OccupancyCell
+    {
+        public PlanetObject ObjectOccupyingCell = null;
+
+        public bool IsOccupied { get { return ObjectOccupyingCell != null;  } }
+
+        public OccupancyCell()
+        {
+        }
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        BuildingOccupancyGrid = new AngleGrid<OccupancyCell>(Mathf.DegToRad(buildingPlacementResolutionDegrees));
+    }
+
+    public bool CanBuildBuilding(Vector3 location)
+    {
+        return !BuildingOccupancyGrid.Get(location.X, location.Y).IsOccupied;
+    }
+
+    public void AddBuilding(PlanetObject building, Vector3 location, int numCells = 3)
+    {
+        foreach (int idx in BuildingOccupancyGrid.GetAdjacentIndices(location.X, location.Y, numCells, true)) {
+            BuildingOccupancyGrid[idx] = new OccupancyCell { ObjectOccupyingCell = building };
+        }
+    }
+
+    public void RemoveBuilding( Vector3 location, int numCells = 3)
+    {
+        foreach (int idx in BuildingOccupancyGrid.GetAdjacentIndices(location.X, location.Y, numCells, true)) {
+            BuildingOccupancyGrid[idx] = new OccupancyCell { ObjectOccupyingCell = null };
+        }
     }
 
 }

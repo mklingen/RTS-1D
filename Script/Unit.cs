@@ -9,9 +9,10 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     [Signal]
     public delegate void OnDeathEventHandler(Unit unitThatDied);
 
-
     [Export]
     public UnitStats Stats = null;
+
+    [Export] private bool AddBuildingOnReady = false;
 
     [Export]
     protected float targetDistanceThreshold = 0.005f;
@@ -108,7 +109,9 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
             setTeam.SetTeam(Team);
         }
         Game.Get().AddUnit(this);
-
+        if (AddBuildingOnReady) {
+            MaybeAddBuilding();
+        }
     }
 
     public override void _Process(double delta)
@@ -267,7 +270,17 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
 
     public void Die()
     {
+        if (Stats.IsABuilding) {
+            planet.RemoveBuilding(GlobalPosition);
+        }
         EmitSignal(SignalName.OnDeath, this);
         QueueFree();
+    }
+
+    public void MaybeAddBuilding()
+    {
+        if (Stats.IsABuilding) {
+            Game.Get().GetPlanet().AddBuilding(this, GlobalPosition);
+        }
     }
 }

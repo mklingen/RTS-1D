@@ -26,6 +26,8 @@ public partial class UnitStats : Resource
     public uint SensingCollisionMask;
 
     [ExportGroup("Building")]
+    [Export]public bool IsABuilding = false;
+
     [Export(PropertyHint.File, "*.tscn")]
     public string PrefabFile;
 

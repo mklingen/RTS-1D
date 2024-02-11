@@ -66,14 +66,17 @@ public partial class PlanetObject : Node3D
 
     public void AutoOrient()
     {
+        if (GlobalPosition.IsZeroApprox()) {
+            return;
+        }
         Planet.TangentFrame tangent = planet.GetTangentFrame(GlobalPosition);
-        Vector3 target = GlobalPosition + tangent.Right;
+        Vector3 target = GlobalPosition + tangent.In;
         if (!GlobalPosition.IsEqualApprox(target)) {
-            LookAt(GlobalPosition + tangent.Right, tangent.Up);
+            LookAt(target, tangent.Up);
         }
     }
 
-    public void ForceSetPosition(Vector3 globalPos)
+    public virtual void ForceSetPosition(Vector3 globalPos)
     {
         this.GlobalPosition = globalPos;
         Vector3 local = GetPlanet().ToLocal(GlobalPosition);
@@ -81,6 +84,9 @@ public partial class PlanetObject : Node3D
         Height = length2d - GetPlanet().Radius;
         radius3d = local.Length() - GetPlanet().Radius;
         Depth = -local.Z;
+        if (this.OrientMode == OrientationMode.Auto) {
+            AutoOrient();
+        }
     }
 
 }
