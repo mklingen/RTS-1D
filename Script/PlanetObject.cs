@@ -67,7 +67,10 @@ public partial class PlanetObject : Node3D
     public void AutoOrient()
     {
         Planet.TangentFrame tangent = planet.GetTangentFrame(GlobalPosition);
-        LookAt(GlobalPosition + tangent.Right, tangent.Up);
+        Vector3 target = GlobalPosition + tangent.Right;
+        if (!GlobalPosition.IsEqualApprox(target)) {
+            LookAt(GlobalPosition + tangent.Right, tangent.Up);
+        }
     }
 
     public void ForceSetPosition(Vector3 globalPos)

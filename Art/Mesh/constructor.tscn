@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddrajiaksrta3"]
+
+[ext_resource type="PackedScene" uid="uid://b6ybr532noanu" path="res://Art/Mesh/constructor.glb" id="1_bbav8"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_nth4n"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_byg6t"]
+
+[node name="constructor" instance=ExtResource("1_bbav8")]
+
+[node name="Constructor" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_nth4n")
+surface_material_override/1 = ExtResource("3_byg6t")

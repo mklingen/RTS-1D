@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://don28ndw5diak"]
 
 [ext_resource type="Script" path="res://Script/Unit.cs" id="1_ld121"]
-[ext_resource type="Resource" uid="uid://cjt5f3xp1amgm" path="res://Units/cube_unit.tres" id="2_lo764"]
+[ext_resource type="Resource" uid="uid://cjt5f3xp1amgm" path="res://Units/tank.tres" id="2_vvo4g"]
 [ext_resource type="Script" path="res://Script/Selectable.cs" id="2_yv3de"]
 [ext_resource type="Script" path="res://Script/HealthBar.cs" id="3_l75ts"]
 [ext_resource type="Script" path="res://Script/SelectionBar.cs" id="4_x6hmx"]
@@ -37,7 +37,7 @@ radius = 0.01
 
 [node name="Unit1" type="Node3D"]
 script = ExtResource("1_ld121")
-Stats = ExtResource("2_lo764")
+Stats = ExtResource("2_vvo4g")
 setNominalHeightOnStart = true
 
 [node name="Selection" type="Node3D" parent="."]

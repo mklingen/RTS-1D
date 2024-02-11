@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtxxatikr85a7"]
+
+[ext_resource type="PackedScene" uid="uid://daohldw30u5u8" path="res://Art/Mesh/refinery.glb" id="1_caa4c"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_tvxly"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_q14fp"]
+
+[node name="refinery" instance=ExtResource("1_caa4c")]
+
+[node name="Refinery" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_tvxly")
+surface_material_override/1 = ExtResource("3_q14fp")

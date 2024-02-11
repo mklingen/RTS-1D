@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkw024crj2mgt"]
+
+[ext_resource type="PackedScene" uid="uid://c6odbladw3yc7" path="res://Art/Mesh/artillery_gun.glb" id="1_2aie5"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_votuq"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_1a6hm"]
+
+[node name="artillery_gun" instance=ExtResource("1_2aie5")]
+
+[node name="ArtilleryGun" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_votuq")
+surface_material_override/1 = ExtResource("3_1a6hm")

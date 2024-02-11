@@ -33,6 +33,9 @@ public partial class StructurePlacement : Node, ITool
 
     public void OnMouseClick(Vector2 mousePixels, Vector3 mousePos, ITool.MouseButton click)
     {
+        if (structureCursor == null) {
+            return;
+        }
         switch (click) {
             case ITool.MouseButton.Left:
                 structureCursor.SetColor(badColor);

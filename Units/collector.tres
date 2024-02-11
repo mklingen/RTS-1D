@@ -13,6 +13,6 @@ MaxHealth = 25.0
 Armor = 0.0
 SensingShape = SubResource("SphereShape3D_uecsj")
 SensingCollisionMask = 1
-PrefabFile = "res://Scene/Prefabs/unit_1.tscn"
+PrefabFile = "res://Scene/Prefabs/resource_collector_1.tscn"
 BuildTime = 10.0
 BuildCost = 1.0

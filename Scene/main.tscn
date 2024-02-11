@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dbfq55rp55g0j"]
+[gd_scene load_steps=30 format=3 uid="uid://dbfq55rp55g0j"]
 
 [ext_resource type="Script" path="res://Script/Game.cs" id="1_ddooy"]
 [ext_resource type="Script" path="res://Script/Planet.cs" id="2_r1u44"]
@@ -7,10 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://d0m0iao611kn8" path="res://Scene/UI/main_ui.tscn" id="5_jpid0"]
 [ext_resource type="Script" path="res://Script/MoveSelectTool.cs" id="5_t1h80"]
 [ext_resource type="PackedScene" uid="uid://do5808am1angg" path="res://Scene/Prefabs/go_to_gizmo.tscn" id="6_275rd"]
-[ext_resource type="PackedScene" uid="uid://crugiqpv1b15t" path="res://Scene/Prefabs/building_1.tscn" id="7_gan5y"]
+[ext_resource type="PackedScene" uid="uid://crugiqpv1b15t" path="res://Scene/Prefabs/command_center.tscn" id="7_gan5y"]
 [ext_resource type="Script" path="res://Script/ResourceField.cs" id="9_mesx2"]
 [ext_resource type="Script" path="res://Script/StructureCursor.cs" id="10_xw7p0"]
 [ext_resource type="PackedScene" uid="uid://cfknavkpg6nb7" path="res://Scene/Prefabs/resource_collector_1.tscn" id="12_fx8w5"]
+[ext_resource type="PackedScene" uid="uid://don28ndw5diak" path="res://Scene/Prefabs/tank.tscn" id="14_p0qyn"]
+[ext_resource type="PackedScene" uid="uid://dkweqgia0geex" path="res://Art/Mesh/factory_1.tscn" id="15_ic5u3"]
+[ext_resource type="PackedScene" uid="uid://dtxxatikr85a7" path="res://Art/Mesh/refinery.tscn" id="16_xm0gv"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_gv2nd"]
 
@@ -130,11 +133,9 @@ near = 0.15
 far = 3.0
 script = ExtResource("3_hkogh")
 mouseSelectionMask = 2
-playerTeam = null
 
 [node name="StructureBuilder" type="Node" parent="Player"]
 script = ExtResource("4_2yueu")
-structureCursor = null
 
 [node name="MoveSelectTool" type="Node" parent="Player"]
 script = ExtResource("5_t1h80")
@@ -148,15 +149,9 @@ transform = Transform3D(0.470734, -0.881366, -0.0400196, 0.871615, 0.471598, -0.
 script = ExtResource("9_mesx2")
 MaxResources = 50.0
 resourceMoteMesh = SubResource("BoxMesh_oa7x1")
-projectionRadius = null
 maxNumMotes = 16
 minMoteScale = 0.5
 maxMoteScale = 1.0
-Height = null
-Depth = null
-GlobalVelocity = null
-setNominalHeightOnStart = null
-OrientMode = null
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="ResourceField"]
 multimesh = SubResource("MultiMesh_a0w41")
@@ -172,46 +167,32 @@ mesh = SubResource("BoxMesh_sl2en")
 skeleton = NodePath("")
 
 [node name="MainUI" parent="." instance=ExtResource("5_jpid0")]
-PlayerTeam = null
 
 [node name="GoToGizmo" parent="." instance=ExtResource("6_275rd")]
-Height = null
-Depth = null
-GlobalVelocity = null
-setNominalHeightOnStart = null
-OrientMode = null
 
 [node name="Building1" parent="." instance=ExtResource("7_gan5y")]
 transform = Transform3D(0.99909, 0.0426429, 0, -0.0426429, 0.99909, 0, 0, 0, 1, 0.0247538, 0.490142, -0.0680378)
-targetDistanceThreshold = null
-state = null
-Team = null
-Height = null
-Depth = null
-GlobalVelocity = null
-setNominalHeightOnStart = null
-OrientMode = null
 
 [node name="ResourceCollector" parent="." instance=ExtResource("12_fx8w5")]
 transform = Transform3D(0.179317, -0.198105, 0.963639, -3.72529e-09, 0.979516, 0.201369, -0.983791, -0.0361089, 0.175644, -0.0720533, 0.503519, 0.0507374)
-targetDistanceThreshold = null
-state = null
-Team = null
-Height = null
-Depth = null
-GlobalVelocity = null
-setNominalHeightOnStart = null
-OrientMode = null
 
 [node name="StructureBlueprint" type="Node3D" parent="."]
 script = ExtResource("10_xw7p0")
 blueprintMaterial = SubResource("StandardMaterial3D_o6poj")
-Height = null
-Depth = null
-GlobalVelocity = null
-setNominalHeightOnStart = null
 OrientMode = 1
 
 [node name="StructureMesh" type="MeshInstance3D" parent="StructureBlueprint"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = SubResource("BoxMesh_8cfwr")
+
+[node name="factory1" parent="." instance=ExtResource("15_ic5u3")]
+transform = Transform3D(-0.968851, -0.237166, -0.0712712, -0.237771, 0.971321, 9.31323e-10, 0.0692272, 0.0169462, -0.997457, -0.1163, 0.478519, -0.0400455)
+
+[node name="refinery" parent="." instance=ExtResource("16_xm0gv")]
+transform = Transform3D(0.890253, 0.455467, 0, -0.455467, 0.890253, 0, 0, 0, 1, 0.247831, 0.421679, 0)
+
+[node name="Unit1" parent="." instance=ExtResource("14_p0qyn")]
+transform = Transform3D(-0.999991, -0.00432839, 0, 0.00432839, -0.999991, 0, 0, 0, 1, -0.0157074, -0.505898, 0.0406136)
+Team = 1
+
+[editable path="Unit1"]

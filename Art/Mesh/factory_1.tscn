@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkweqgia0geex"]
+
+[ext_resource type="PackedScene" uid="uid://d0k3jq2461g76" path="res://Art/Mesh/factory1.glb" id="1_bx7gq"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_74fd5"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_f05oa"]
+
+[node name="factory1" instance=ExtResource("1_bx7gq")]
+
+[node name="Factory1" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_74fd5")
+surface_material_override/1 = ExtResource("3_f05oa")

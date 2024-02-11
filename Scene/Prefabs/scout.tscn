@@ -1,0 +1,78 @@
+[gd_scene load_steps=14 format=3 uid="uid://b64esf4gjbswk"]
+
+[ext_resource type="Script" path="res://Script/Unit.cs" id="1_xi1r3"]
+[ext_resource type="Resource" uid="uid://bp47lfw8nqp5q" path="res://Units/scout.tres" id="2_cy3fp"]
+[ext_resource type="Script" path="res://Script/Selectable.cs" id="3_kt7da"]
+[ext_resource type="Script" path="res://Script/SelectionBar.cs" id="4_2iedt"]
+[ext_resource type="Script" path="res://Script/HealthBar.cs" id="5_sc704"]
+[ext_resource type="Script" path="res://Script/Weapon.cs" id="6_a20ky"]
+[ext_resource type="Resource" uid="uid://bel7fh675uqvi" path="res://Weapons/tank_cannon.tres" id="7_rjj2c"]
+[ext_resource type="PackedScene" uid="uid://cnqqcpqed7s00" path="res://Art/Mesh/scout.tscn" id="8_en4jk"]
+
+[sub_resource type="Gradient" id="Gradient_cgk4m"]
+offsets = PackedFloat32Array(0, 0.995776)
+colors = PackedColorArray(0, 0, 0, 0.498039, 0, 0, 0, 0.556863)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jyahk"]
+gradient = SubResource("Gradient_cgk4m")
+width = 8
+height = 2
+
+[sub_resource type="Gradient" id="Gradient_j0atj"]
+offsets = PackedFloat32Array(0.00739176, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_imqgy"]
+gradient = SubResource("Gradient_j0atj")
+width = 8
+height = 2
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0)
+repeat = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wjhcc"]
+radius = 0.01
+
+[node name="Scout" type="Node3D"]
+script = ExtResource("1_xi1r3")
+Stats = ExtResource("2_cy3fp")
+setNominalHeightOnStart = true
+
+[node name="Selection" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+script = ExtResource("3_kt7da")
+
+[node name="Selection" type="Sprite3D" parent="Selection"]
+transform = Transform3D(0.999987, 1.26943e-08, -0.00502651, -2.54659e-08, 0.5, -1.52957e-08, 0.00502651, 7.71174e-09, 0.999987, -1.26893e-08, -0.016098, -1.49012e-08)
+no_depth_test = true
+fixed_size = true
+texture_filter = 0
+texture = SubResource("GradientTexture2D_jyahk")
+script = ExtResource("4_2iedt")
+
+[node name="Health" type="Sprite3D" parent="Selection/Selection"]
+transform = Transform3D(1, 6.97037e-08, 2.56114e-09, 3.69619e-09, 1, 0, -1.02445e-08, -1.49012e-08, 1, 2.39816e-08, -5.96046e-08, 0.000495449)
+no_depth_test = true
+fixed_size = true
+texture_filter = 0
+texture = SubResource("GradientTexture2D_imqgy")
+script = ExtResource("5_sc704")
+highHealthColor = Color(0, 1, 0, 1)
+midHealthColor = Color(1, 0.929412, 0.403922, 1)
+midHealthThreshold = 0.75
+lowHealthColor = Color(1, 0, 0, 1)
+lowHealthThreshold = 0.5
+
+[node name="Weapon" type="Node3D" parent="."]
+transform = Transform3D(1, 1.09721e-08, 5.82077e-09, 5.47152e-09, 1, 0, 4.88944e-09, 2.98023e-08, 1, 8.69451e-11, 0.0179242, 2.36159e-10)
+script = ExtResource("6_a20ky")
+Stats = ExtResource("7_rjj2c")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("SphereShape3D_wjhcc")
+
+[node name="scout" parent="." instance=ExtResource("8_en4jk")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.0104517, 0)

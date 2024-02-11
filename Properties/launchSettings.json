@@ -6,7 +6,7 @@
     "Profile 1": {
       "commandName": "Executable",
       "executablePath": "C:\\Users\\matth\\Documents\\Godot\\Godot_v4.1.1-stable_mono_win64\\Godot_v4.1.1-stable_mono_win64.exe",
-      "workingDirectory": "C:\\Users\\matth\\Documents\\1DRTS",
+      "workingDirectory": "C:\\Users\\matth\\Documents\\1DRTS\\RTS-1D",
       "nativeDebugging": true
     }
   }

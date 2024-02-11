@@ -94,6 +94,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00150261, -0.0333362)
 script = ExtResource("7_q8aqu")
 
 [node name="LightEffect" type="Node3D" parent="Collector"]
+visible = false
 
 [node name="Particles" type="CPUParticles3D" parent="Collector/LightEffect"]
 material_override = SubResource("StandardMaterial3D_y7pfy")

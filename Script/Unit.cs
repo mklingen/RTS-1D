@@ -11,7 +11,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
 
 
     [Export]
-    public UnitStats Stats = new UnitStats();
+    public UnitStats Stats = null;
 
     [Export]
     protected float targetDistanceThreshold = 0.005f;
@@ -189,7 +189,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
             return;
         }
 
-        Vector3 targetVelocity = (currentTarget - GlobalPosition);
+        Vector3 targetVelocity = (currentTarget - GlobalPosition) * Stats.MaxSpeed;
         Vector3 tangentVelocity = planet.ProjectToCylinder(GlobalPosition + targetVelocity.Normalized(), Height, Depth) - GlobalPosition;
         targetVelocity = (tangentVelocity.Normalized() * targetVelocity.Length()).LimitLength(Stats.MaxSpeed);
         GlobalVelocity = GlobalVelocity * 0.1f + 0.9f * targetVelocity;

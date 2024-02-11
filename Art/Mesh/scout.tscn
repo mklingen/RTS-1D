@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnqqcpqed7s00"]
+
+[ext_resource type="PackedScene" uid="uid://cre6ugqoog8fk" path="res://Art/Mesh/scout.glb" id="1_6v7qm"]
+[ext_resource type="Material" uid="uid://bvyf2lxbm40ma" path="res://Material/rts_material.tres" id="2_261w7"]
+[ext_resource type="Material" uid="uid://dex0gyajb5fkw" path="res://Material/team_material.tres" id="3_5dtl1"]
+
+[node name="scout" instance=ExtResource("1_6v7qm")]
+
+[node name="Scout" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_261w7")
+surface_material_override/1 = ExtResource("3_5dtl1")
