@@ -13,6 +13,7 @@ MaxHealth = 100.0
 Armor = 1.0
 SensingShape = SubResource("SphereShape3D_uecsj")
 SensingCollisionMask = 1
+IsABuilding = false
 PrefabFile = "res://Scene/Prefabs/tank.tscn"
 BuildTime = 10.0
 BuildCost = 4.0

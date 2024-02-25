@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://don28ndw5diak"]
+[gd_scene load_steps=16 format=3 uid="uid://don28ndw5diak"]
 
 [ext_resource type="Script" path="res://Script/Unit.cs" id="1_ld121"]
 [ext_resource type="Resource" uid="uid://cjt5f3xp1amgm" path="res://Units/tank.tres" id="2_vvo4g"]
 [ext_resource type="Script" path="res://Script/Selectable.cs" id="2_yv3de"]
+[ext_resource type="Script" path="res://Script/OffsetRoot.cs" id="3_ks4cs"]
 [ext_resource type="Script" path="res://Script/HealthBar.cs" id="3_l75ts"]
 [ext_resource type="Script" path="res://Script/SelectionBar.cs" id="4_x6hmx"]
 [ext_resource type="Script" path="res://Script/Weapon.cs" id="5_45rxc"]
@@ -10,21 +11,21 @@
 [ext_resource type="PackedScene" uid="uid://b3bwo18wnsuhp" path="res://Art/Mesh/tank_turret_1.tscn" id="8_7cv3u"]
 [ext_resource type="PackedScene" uid="uid://d0i7u3vbldq4k" path="res://Art/Mesh/tank_body.tscn" id="9_xxksl"]
 
-[sub_resource type="Gradient" id="Gradient_cgk4m"]
+[sub_resource type="Gradient" id="Gradient_bjel0"]
 offsets = PackedFloat32Array(0, 0.995776)
 colors = PackedColorArray(0, 0, 0, 0.498039, 0, 0, 0, 0.556863)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_jyahk"]
-gradient = SubResource("Gradient_cgk4m")
+gradient = SubResource("Gradient_bjel0")
 width = 8
 height = 2
 
-[sub_resource type="Gradient" id="Gradient_j0atj"]
+[sub_resource type="Gradient" id="Gradient_l0na5"]
 offsets = PackedFloat32Array(0.00739176, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_imqgy"]
-gradient = SubResource("Gradient_j0atj")
+gradient = SubResource("Gradient_l0na5")
 width = 8
 height = 2
 fill = 2
@@ -39,12 +40,17 @@ radius = 0.01
 script = ExtResource("1_ld121")
 Stats = ExtResource("2_vvo4g")
 setNominalHeightOnStart = true
+startRandomOffset = 0.005
+startDepthRandomOffset = 0.05
 
-[node name="Selection" type="Node3D" parent="."]
+[node name="OffsetRoot" type="Node3D" parent="."]
+script = ExtResource("3_ks4cs")
+
+[node name="Selection" type="Node3D" parent="OffsetRoot"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 script = ExtResource("2_yv3de")
 
-[node name="Selection" type="Sprite3D" parent="Selection"]
+[node name="Selection" type="Sprite3D" parent="OffsetRoot/Selection"]
 transform = Transform3D(0.999987, 1.26943e-08, -0.00502651, -2.54659e-08, 0.5, -1.52957e-08, 0.00502651, 7.71174e-09, 0.999987, -1.26893e-08, -0.016098, -1.49012e-08)
 no_depth_test = true
 fixed_size = true
@@ -52,7 +58,7 @@ texture_filter = 0
 texture = SubResource("GradientTexture2D_jyahk")
 script = ExtResource("4_x6hmx")
 
-[node name="Health" type="Sprite3D" parent="Selection/Selection"]
+[node name="Health" type="Sprite3D" parent="OffsetRoot/Selection/Selection"]
 transform = Transform3D(1, 6.97037e-08, 2.56114e-09, 3.69619e-09, 1, 0, -1.02445e-08, -1.49012e-08, 1, 2.39816e-08, -5.96046e-08, 0.000495449)
 no_depth_test = true
 fixed_size = true
@@ -65,18 +71,18 @@ midHealthThreshold = 0.75
 lowHealthColor = Color(1, 0, 0, 1)
 lowHealthThreshold = 0.5
 
-[node name="Weapon" type="Node3D" parent="."]
+[node name="Weapon" type="Node3D" parent="OffsetRoot"]
 transform = Transform3D(1, 1.09721e-08, 5.82077e-09, 5.47152e-09, 1, 0, 4.88944e-09, 2.98023e-08, 1, 0, 0.01, 0)
 script = ExtResource("5_45rxc")
 Stats = ExtResource("6_md20p")
 
-[node name="tank_turret_1" parent="Weapon" instance=ExtResource("8_7cv3u")]
+[node name="tank_turret_1" parent="OffsetRoot/Weapon" instance=ExtResource("8_7cv3u")]
 transform = Transform3D(-1, -1.73472e-16, -8.74228e-08, 2.62856e-24, 1, 8.27181e-23, 8.74228e-08, 0, -1, 1.38778e-17, -0.0199934, 0)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="OffsetRoot"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="OffsetRoot/StaticBody3D"]
 shape = SubResource("SphereShape3D_wjhcc")
 
-[node name="tank_body" parent="." instance=ExtResource("9_xxksl")]
+[node name="tank_body" parent="OffsetRoot" instance=ExtResource("9_xxksl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00999345, 0)

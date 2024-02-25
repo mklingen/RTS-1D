@@ -14,11 +14,11 @@ public partial class Planet : MeshInstance3D
         return ToGlobal(ToLocal(worldPos).Normalized() * (Radius + height));
     }
 
-    public Vector3 ProjectToCylinder(Vector3 worldPos, float height, float depth)
+    public Vector3 ProjectToCylinder(Vector3 worldPos, float height, float depth, float angleOffset = 0)
     {
         Vector3 local = ToLocal(worldPos);
         float r = Radius + height;
-        float theta = Mathf.Atan2(local.Y, local.X);
+        float theta = Mathf.Atan2(local.Y, local.X) + angleOffset;
         return ToGlobal(new Vector3(r * Mathf.Cos(theta), r * Mathf.Sin(theta), -depth));
     }
 

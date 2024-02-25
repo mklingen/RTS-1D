@@ -29,6 +29,9 @@ public partial class MoveSelectTool : Node, ITool
     private MainCamera mainCamera;
 
     public int Team = 0;
+    // Randomly offset move commands by this amount.
+    [Export]
+    private float moveRandomization = 0.05f;
 
     public override void _Ready()
     {
@@ -57,7 +60,7 @@ public partial class MoveSelectTool : Node, ITool
 
     private void PopupGotoGizmo(Vector3 pos)
     {
-        goToGizmo.GlobalPosition = pos;
+        goToGizmo.ForceSetPosition(pos);
         goToGizmo.GetChild<TransformPopper>(0).Transition(TransformPopper.State.PoppingIn);
     }
 
@@ -69,14 +72,14 @@ public partial class MoveSelectTool : Node, ITool
                 if (selectable.NativeInstance.ToInt64() == 0x0) {
                     continue;
                 }
-                Unit selectableUnit = selectable.GetParent<Unit>();
+                Unit selectableUnit = Game.FindParent<Unit>(selectable);
                 if (selectableUnit == null) {
                     continue;
                 }
                 if (!selectableUnit.Stats.CanMove()) {
                     continue;
                 }
-                selectableUnit.GoTo(mousePos);
+                selectableUnit.GoTo(mousePos + Game.RandomVector3(moveRandomization));
             }
         }
     }

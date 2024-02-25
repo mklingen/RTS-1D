@@ -36,6 +36,9 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     [Export]
     private int playerTeam = 0;
 
+    [Export]
+    private float height = 0.1f;
+
     private BuildMenu buildMenu;
     private bool suppressMouseClicks;
 
@@ -181,9 +184,9 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         depth = Mathf.Clamp(depth, minDepth, maxDepth);
         velocity *= 0.65f;
         depthVelocity *= 0.5f;
-        GlobalPosition = planet.ProjectToCylinder(GlobalPosition, 0, 0);
+        GlobalPosition = planet.ProjectToCylinder(GlobalPosition, height, 0);
         GlobalPosition += tangentFrame.Out * depth;
-        LookAtFromPosition(GlobalPosition, planet.ProjectToCylinder(GlobalPosition + tangentFrame.In, 0, 0), tangentFrame.Up);
+        LookAtFromPosition(GlobalPosition, planet.ProjectToCylinder(GlobalPosition + tangentFrame.In, 0, 0), tangentFrame.Up.Rotated(tangentFrame.Left, 0.2f));
     }
 
     private void HandleLeftClick()

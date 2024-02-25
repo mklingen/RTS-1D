@@ -182,6 +182,22 @@ public partial class Game : Node3D
         }
     }
 
+    public static T FindParent<T>(Node child) where T : class
+    {
+        if (child is T) {
+            return child as T;
+        }
+        if (child.GetParent() == null) {
+            return null;
+        }
+        return FindParent<T>(child.GetParent());
+    }
+
+    public static Vector3 RandomVector3(float magnitude)
+    {
+        return new Vector3((float)GD.RandRange(-magnitude, magnitude), (float)GD.RandRange(-magnitude, magnitude), (float)GD.RandRange(-magnitude, magnitude));
+    }
+
     public static void ClearChildren(Node node)
     {
         List<Node> children = node.GetChildren(true).ToList();

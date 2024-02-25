@@ -92,7 +92,7 @@ public partial class ConstructionBay : Node3D, Unit.ISetTeam, Selectable.ISelect
         Unit created = unit.CreateUnit(Game.Get());
         if (created != null) {
             created.GlobalRotation = GlobalRotation;
-            created.ForceSetPosition(GlobalPosition);
+            created.ForceSetPosition(GlobalPosition, true);
             created.Team = Team;
             Game.Get().GetTeam(Team).Resources -= unit.BuildCost;
             GD.Print("Created unit.");

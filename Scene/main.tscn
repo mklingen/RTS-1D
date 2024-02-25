@@ -123,12 +123,13 @@ light_color = Color(0, 0.490196, 0.494118, 1)
 light_energy = 0.15
 
 [node name="Player" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
+transform = Transform3D(1, 0, 0, 0, 0.868182, 0.496247, 0, -0.496247, 0.868182, -0.0138439, 0.871152, 0.402864)
 fov = 45.0
 near = 0.15
 far = 3.0
 script = ExtResource("3_hkogh")
 mouseSelectionMask = 2
+height = 0.25
 
 [node name="StructureBuilder" type="Node" parent="Player" node_paths=PackedStringArray("structureCursor")]
 script = ExtResource("4_2yueu")
@@ -173,8 +174,11 @@ skeleton = NodePath("")
 transform = Transform3D(0.99909, 0.0426429, 0, -0.0426429, 0.99909, 0, 0, 0, 1, 0.0247538, 0.490142, -0.0680378)
 AddBuildingOnReady = true
 
+[node name="command_center" parent="Building1" index="4"]
+transform = Transform3D(1, -3.72529e-09, 2.09548e-09, 0, 0.999852, 0.017208, 0, -0.0172082, 0.999852, 5.58794e-09, -0.00410852, -0.0462605)
+
 [node name="ResourceCollector" parent="." instance=ExtResource("12_fx8w5")]
-transform = Transform3D(0.179317, -0.198105, 0.963639, -3.72529e-09, 0.979516, 0.201369, -0.983791, -0.0361089, 0.175644, -0.0720533, 0.503519, 0.0507374)
+transform = Transform3D(0.179317, -0.198105, 0.963639, -3.72529e-09, 0.979516, 0.201369, -0.983791, -0.0361089, 0.175644, -0.0593883, 0.503519, -0.0187467)
 
 [node name="StructureBlueprint" type="Node3D" parent="."]
 script = ExtResource("10_xw7p0")
