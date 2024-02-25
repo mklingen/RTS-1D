@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dbfq55rp55g0j"]
+[gd_scene load_steps=30 format=3 uid="uid://dbfq55rp55g0j"]
 
 [ext_resource type="Script" path="res://Script/Game.cs" id="1_ddooy"]
 [ext_resource type="Script" path="res://Script/Planet.cs" id="2_r1u44"]
@@ -13,11 +13,33 @@
 [ext_resource type="PackedScene" uid="uid://cfknavkpg6nb7" path="res://Scene/Prefabs/resource_collector_1.tscn" id="12_fx8w5"]
 [ext_resource type="PackedScene" uid="uid://don28ndw5diak" path="res://Scene/Prefabs/tank.tscn" id="14_p0qyn"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_gv2nd"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_bfbjo"]
+height = 4.0
+radial_segments = 32
+
+[sub_resource type="Gradient" id="Gradient_scnev"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.490395, 1)
+colors = PackedColorArray(0.724643, 0.724643, 0.724643, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_13785"]
+frequency = 0.03
+fractal_type = 0
+cellular_distance_function = 2
+cellular_jitter = 0.0
+domain_warp_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ryul"]
+height = 1024
+invert = true
+seamless = true
+color_ramp = SubResource("Gradient_scnev")
+noise = SubResource("FastNoiseLite_13785")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rcsuf"]
 albedo_color = Color(0, 0.858824, 0.592157, 1)
-metallic = 0.56
+albedo_texture = SubResource("NoiseTexture2D_1ryul")
+metallic = 0.65
 metallic_specular = 0.6
 roughness = 0.76
 
@@ -84,23 +106,20 @@ albedo_color = Color(0.529412, 0.603922, 1, 0.721569)
 [node name="main" type="Node3D"]
 script = ExtResource("1_ddooy")
 
-[node name="Planet" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_gv2nd")
-surface_material_override/0 = SubResource("StandardMaterial3D_rcsuf")
+[node name="Planet" type="Node3D" parent="."]
 script = ExtResource("2_r1u44")
 Radius = 0.5
 
-[node name="Planet" type="MeshInstance3D" parent="Planet"]
-mesh = SubResource("SphereMesh_gv2nd")
+[node name="PlanetMesh" type="MeshInstance3D" parent="Planet"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_bfbjo")
 surface_material_override/0 = SubResource("StandardMaterial3D_rcsuf")
-script = ExtResource("2_r1u44")
-Radius = 0.5
 
-[node name="MouseSelectionPlane" type="StaticBody3D" parent="Planet/Planet"]
+[node name="MouseSelectionPlane" type="StaticBody3D" parent="Planet"]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/Planet/MouseSelectionPlane"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/MouseSelectionPlane"]
 shape = SubResource("WorldBoundaryShape3D_64nrg")
 
 [node name="Lighting" type="Node3D" parent="."]

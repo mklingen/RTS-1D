@@ -26,18 +26,35 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     private float depthVelocity;
     // Planet we are on.
     private Planet planet;
+    [ExportGroup("Camera Controls")]
     // Maximum distance we can zoom in.
     [Export]
     private float maxZoom = 1;
 
+    [Export]
+    private float maxAngleSpeed = 10.0f;
+
+    [Export]
+    private float angleSensitivity = 1.0f;
+
+    [Export]
+    private float velocityDamping = 0.65f;
+
+    [Export]
+    private float depthDamping = 0.5f;
+
+    [Export]
+    private float height = 0.1f;
+
+    [Export]
+    private float depthSensitivity = 0.5f;
+
+    [ExportGroup("Selection")]
     [Export(PropertyHint.Layers3DPhysics)]
     private uint mouseSelectionMask;
 
     [Export]
     private int playerTeam = 0;
-
-    [Export]
-    private float height = 0.1f;
 
     private BuildMenu buildMenu;
     private bool suppressMouseClicks;
@@ -141,14 +158,14 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     private void HandleInput()
     {
         // Handle input for changing angle
-        float angleSpeed = Mathf.Clamp((depth - minDepth) / (maxDepth - minDepth), 1.0f, 10.0f); // Adjust the speed of angle change as needed
+        float angleSpeed = Mathf.Clamp((depth - minDepth) / (maxDepth - minDepth), 1.0f, maxAngleSpeed); // Adjust the speed of angle change as needed
         //float angleDamping = 0.75f;
         //planetVelocity.Longitude *= angleDamping;
         if (Input.IsActionPressed("CameraLeft")) {
-            velocity = tangentFrame.Left * 0.25f * angleSpeed;
+            velocity = tangentFrame.Left * angleSensitivity * angleSpeed;
         }
         else if (Input.IsActionPressed("CameraRight")) {
-            velocity = tangentFrame.Right * 0.25f * angleSpeed;
+            velocity = tangentFrame.Right * angleSensitivity * angleSpeed;
         }
         if (Input.IsActionPressed("CameraUp")) {
             mouseWheelVelocity = -1;
@@ -156,7 +173,7 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         else if (Input.IsActionPressed("CameraDown")) {
             mouseWheelVelocity = 1;
         } else {
-            mouseWheelVelocity = mouseWheelVelocity * 0.65f;
+            mouseWheelVelocity = mouseWheelVelocity * depthDamping;
         }
 
         if (Input.IsActionJustReleased("ui_cancel")) {
@@ -164,8 +181,7 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         }
 
         // Handle input for changing depth using the mouse wheel
-        float depthSpeed = 0.5f; // Adjust the speed of depth change as needed
-        depthVelocity += depthSpeed * mouseWheelVelocity;
+        depthVelocity += depthSensitivity * mouseWheelVelocity;
 
         activeTool?.OnMouseMove(mousePos, planet.ProjectToCylinder(mouseSelectionPoint, 0, 0));
 
@@ -182,8 +198,8 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         GlobalPosition += velocity * (float)delta;
         depth += depthVelocity * (float)delta;
         depth = Mathf.Clamp(depth, minDepth, maxDepth);
-        velocity *= 0.65f;
-        depthVelocity *= 0.5f;
+        velocity *= velocityDamping;
+        depthVelocity *= depthDamping;
         GlobalPosition = planet.ProjectToCylinder(GlobalPosition, height, 0);
         GlobalPosition += tangentFrame.Out * depth;
         LookAtFromPosition(GlobalPosition, planet.ProjectToCylinder(GlobalPosition + tangentFrame.In, 0, 0), tangentFrame.Up.Rotated(tangentFrame.Left, 0.2f));

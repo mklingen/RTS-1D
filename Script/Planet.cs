@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-public partial class Planet : MeshInstance3D
+public partial class Planet : Node3D
 {
     [Export]
     public float Radius = 1.0f;
