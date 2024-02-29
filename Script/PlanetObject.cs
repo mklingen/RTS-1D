@@ -72,7 +72,7 @@ public partial class PlanetObject : Node3D
     {
         base._Process(delta);
         Vector3 globalPosition = GlobalPosition;
-        Vector3 nextPosition = GetPlanet().ProjectToSurface(GetPlanet().ProjectToCylinder(globalPosition + GlobalVelocity * (float)delta, Height, Depth), radius3d);
+        Vector3 nextPosition = GetPlanet().ProjectToCylinder(globalPosition + GlobalVelocity * (float)delta, Height, Depth);
         switch (OrientMode) {
             case OrientationMode.Velocity: {
                     if (GlobalVelocity.LengthSquared() > 1e-6) {
@@ -121,7 +121,7 @@ public partial class PlanetObject : Node3D
         Depth = -local.Z;
         if (randomizeDepth) {
             Depth += (float)GD.RandRange(-startDepthRandomOffset, startRandomOffset);
-            this.GlobalPosition = GetPlanet().ProjectToSurface(GetPlanet().ProjectToCylinder(globalPos, Height, Depth), radius3d);
+            this.GlobalPosition = GetPlanet().ProjectToCylinder(globalPos, Height, Depth);
         }
         if (this.OrientMode == OrientationMode.Auto) {
             AutoOrient();

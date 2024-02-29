@@ -9,7 +9,7 @@ public partial class Planet : Node3D
     public float Radius = 1.0f;
 
 
-    public Vector3 ProjectToSurface(Vector3 worldPos, float height = 0)
+    public Vector3 ProjectToSphere(Vector3 worldPos, float height = 0)
     {
         return ToGlobal(ToLocal(worldPos).Normalized() * (Radius + height));
     }
@@ -20,6 +20,15 @@ public partial class Planet : Node3D
         float r = Radius + height;
         float theta = Mathf.Atan2(local.Y, local.X) + angleOffset;
         return ToGlobal(new Vector3(r * Mathf.Cos(theta), r * Mathf.Sin(theta), -depth));
+    }
+
+
+    public Vector3 ProjectToSurface(Vector3 worldPos, float height = 0)
+    {
+        Vector3 local = ToLocal(worldPos);
+        float r = Radius + height;
+        float theta = Mathf.Atan2(local.Y, local.X);
+        return ToGlobal(new Vector3(r * Mathf.Cos(theta), r * Mathf.Sin(theta), local.Z));
     }
 
 
@@ -59,9 +68,9 @@ public partial class Planet : Node3D
     public TangentFrame GetTangentFrame(Vector3 worldPos)
     {
         Vector3 local = ToLocal(worldPos).Normalized();
-
+        Vector3 local2d = new Vector3(local.X, local.Y, 0).Normalized();
         // Up vector is the normalized position vector
-        Vector3 up = local;
+        Vector3 up = local2d;
 
         // In vector is the negative of the global Z axis
         Vector3 In = -Basis.Z.Normalized();

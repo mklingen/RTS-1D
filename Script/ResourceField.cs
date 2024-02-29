@@ -150,7 +150,7 @@ public partial class ResourceField : PlanetObject
         Vector3 offset = RandomInsideUnitSphere() * projectionRadius;
         Vector3 globalPos = ToGlobal(offset);
         motesAlive[idx] = true;
-        Vector3 projected = planet.ProjectToSurface(globalPos);
+        Vector3 projected = planet.ProjectToSurface(globalPos, 0.0f);
         motesGlobalPositions[idx] = projected;
         Planet.TangentFrame tangent = planet.GetTangentFrame(projected);
         float randomScale = (float)GD.RandRange(minMoteScale, maxMoteScale);

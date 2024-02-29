@@ -21,7 +21,7 @@ public partial class Selectable : Node3D
     {
         base._Process(delta);
         if (FaceCamera && IsVisibleInTree()) {
-            LookAt(camera.GlobalPosition, camera.GetPlanet().GetTangentFrame(GlobalPosition).Up, true);
+            LookAt(camera.GlobalPosition, camera.Basis.Column1, true);
         }
     }
 

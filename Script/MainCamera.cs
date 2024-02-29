@@ -21,9 +21,9 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     // Max zoom.
     private float maxDepth;
     // Curent zoom.
-    private float depth;
+    private float cameraZoom;
     // Zoom velocity.
-    private float depthVelocity;
+    private float cameraZoomVelocity;
     // Planet we are on.
     private Planet planet;
     [ExportGroup("Camera Controls")]
@@ -41,13 +41,15 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     private float velocityDamping = 0.65f;
 
     [Export]
-    private float depthDamping = 0.5f;
+    private float cameraZoomDamping = 0.5f;
 
     [Export]
     private float height = 0.1f;
 
     [Export]
-    private float depthSensitivity = 0.5f;
+    private float cameraZoomSensitivity = 0.5f;
+
+    private float depth = 0.0f;
 
     [ExportGroup("Selection")]
     [Export(PropertyHint.Layers3DPhysics)]
@@ -97,10 +99,11 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
             buildMenu.Close();
         }
         tangentFrame = planet.GetTangentFrame(GlobalPosition);
-        minDepth = planet.ToLocal(GlobalPosition).Z;
-        maxDepth = planet.ToLocal(GlobalPosition).Z + maxZoom;
-        depth = minDepth;
-        depthVelocity = 0;
+        minDepth = (planet.ProjectToSurface(GlobalPosition) - GlobalPosition).Length();
+        maxDepth = minDepth + maxZoom;
+        depth = -planet.ToLocal(GlobalPosition).Z;
+        cameraZoom = minDepth;
+        cameraZoomVelocity = 0;
         tools = Game.FindInterfacesRecursive<ITool>(this).ToList();
         SetActiveTool(tools.FirstOrDefault());
     }
@@ -144,7 +147,7 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         if (suppressMouseClicks) {
             return;
         }
-        Vector3 pos = planet.ProjectToCylinder(mouseSelectionPoint, 0, 0);
+        Vector3 pos = planet.ProjectToCylinder(mouseSelectionPoint, 0.0f, 0.0f);
         bool isRightPressed = Input.IsActionJustPressed("SecondaryClick");
         if (isRightPressed) {
             activeTool?.OnMouseFirstPressed(mousePos, pos, ITool.MouseButton.Right);
@@ -158,7 +161,7 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     private void HandleInput()
     {
         // Handle input for changing angle
-        float angleSpeed = Mathf.Clamp((depth - minDepth) / (maxDepth - minDepth), 1.0f, maxAngleSpeed); // Adjust the speed of angle change as needed
+        float angleSpeed = Mathf.Clamp((cameraZoom - minDepth) / (maxDepth - minDepth), 1.0f, maxAngleSpeed); // Adjust the speed of angle change as needed
         //float angleDamping = 0.75f;
         //planetVelocity.Longitude *= angleDamping;
         if (Input.IsActionPressed("CameraLeft")) {
@@ -173,15 +176,15 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         else if (Input.IsActionPressed("CameraDown")) {
             mouseWheelVelocity = 1;
         } else {
-            mouseWheelVelocity = mouseWheelVelocity * depthDamping;
+            mouseWheelVelocity = mouseWheelVelocity * cameraZoomDamping;
         }
 
         if (Input.IsActionJustReleased("ui_cancel")) {
             OnUICancel();
         }
 
-        // Handle input for changing depth using the mouse wheel
-        depthVelocity += depthSensitivity * mouseWheelVelocity;
+        // Handle input for changing cameraZoom using the mouse wheel
+        cameraZoomVelocity += cameraZoomSensitivity * mouseWheelVelocity;
 
         activeTool?.OnMouseMove(mousePos, planet.ProjectToCylinder(mouseSelectionPoint, 0, 0));
 
@@ -194,15 +197,16 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
 
     private void UpdatePosition(double delta)
     {
-        GlobalPosition = GlobalPosition - tangentFrame.Out * depth;
+        GlobalPosition = GlobalPosition - tangentFrame.Up * cameraZoom;
         GlobalPosition += velocity * (float)delta;
-        depth += depthVelocity * (float)delta;
-        depth = Mathf.Clamp(depth, minDepth, maxDepth);
+        cameraZoom += cameraZoomVelocity * (float)delta;
+        cameraZoom = Mathf.Clamp(cameraZoom, minDepth, maxDepth);
         velocity *= velocityDamping;
-        depthVelocity *= depthDamping;
-        GlobalPosition = planet.ProjectToCylinder(GlobalPosition, height, 0);
-        GlobalPosition += tangentFrame.Out * depth;
-        LookAtFromPosition(GlobalPosition, planet.ProjectToCylinder(GlobalPosition + tangentFrame.In, 0, 0), tangentFrame.Up.Rotated(tangentFrame.Left, 0.2f));
+        cameraZoomVelocity *= cameraZoomDamping;
+        GlobalPosition = planet.ProjectToCylinder(GlobalPosition, height, depth);
+        GlobalPosition += tangentFrame.Up * cameraZoom;
+        LookAtFromPosition(GlobalPosition, planet.ProjectToCylinder(GlobalPosition + tangentFrame.In, 0, 0.2f), tangentFrame.Up.Rotated(tangentFrame.Left, 0.2f));
+        zoom = cameraZoom;
     }
 
     private void HandleLeftClick()

@@ -81,7 +81,7 @@ public partial class Bullet : Node3D
             planet = Game.Get().GetPlanet();
         }
         Vector3 halfPoint = (from + to) * 0.5f;
-        Vector3 projHalfPoint = planet.ProjectToSurface(halfPoint);
+        Vector3 projHalfPoint = planet.ProjectToCylinder(halfPoint, 0.0f, 0.0f);
         float heightDiff = (halfPoint - projHalfPoint).Length();
         if (len < 0.1) {
             heightDiff = 0;

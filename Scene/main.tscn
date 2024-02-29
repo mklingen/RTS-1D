@@ -14,13 +14,15 @@
 [ext_resource type="PackedScene" uid="uid://don28ndw5diak" path="res://Scene/Prefabs/tank.tscn" id="14_p0qyn"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_bfbjo"]
+top_radius = 2.0
+bottom_radius = 2.0
 height = 4.0
-radial_segments = 32
+radial_segments = 128
 
 [sub_resource type="Gradient" id="Gradient_scnev"]
 interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.490395, 1)
-colors = PackedColorArray(0.724643, 0.724643, 0.724643, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0, 0.186441, 0.699435, 1)
+colors = PackedColorArray(0.724643, 0.724643, 0.724643, 1, 0.823397, 0.837525, 0.79786, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_13785"]
 frequency = 0.03
@@ -30,7 +32,8 @@ cellular_jitter = 0.0
 domain_warp_type = 2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ryul"]
-height = 1024
+width = 2048
+height = 2048
 invert = true
 seamless = true
 color_ramp = SubResource("Gradient_scnev")
@@ -63,14 +66,29 @@ sky_material = SubResource("ProceduralSkyMaterial_2pba5")
 
 [sub_resource type="Environment" id="Environment_cey1v"]
 background_mode = 1
-background_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+background_color = Color(0.760784, 0.921569, 0.996078, 1)
 sky = SubResource("Sky_5e8g3")
 ambient_light_source = 2
 ambient_light_color = Color(0.254902, 0.321569, 0.631373, 1)
+ambient_light_energy = 0.5
 tonemap_mode = 1
-tonemap_exposure = 2.87
-tonemap_white = 3.77
+tonemap_exposure = 2.26
+tonemap_white = 5.25
+ssao_radius = 16.0
+ssao_intensity = 16.0
+ssao_power = 0.23898
+ssao_detail = 2.79
+ssao_horizon = 1.0
+ssao_sharpness = 1.0
+ssao_light_affect = 1.0
+ssil_enabled = true
+ssil_radius = 2.3
+ssil_intensity = 16.0
+sdfgi_use_occlusion = true
 glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.180392, 0.470588, 1, 1)
+fog_light_energy = 1.74
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mjtb3"]
 albedo_color = Color(1, 1, 0, 1)
@@ -108,7 +126,7 @@ script = ExtResource("1_ddooy")
 
 [node name="Planet" type="Node3D" parent="."]
 script = ExtResource("2_r1u44")
-Radius = 0.5
+Radius = 2.0
 
 [node name="PlanetMesh" type="MeshInstance3D" parent="Planet"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
@@ -142,13 +160,10 @@ light_color = Color(0, 0.490196, 0.494118, 1)
 light_energy = 0.15
 
 [node name="Player" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.868182, 0.496247, 0, -0.496247, 0.868182, -0.0138439, 0.871152, 0.402864)
-fov = 45.0
-near = 0.15
+transform = Transform3D(1, 0, 0, 0, 0.943356, 0.331782, 0, -0.331782, 0.943356, -0.0109105, 2.13012, 0.410256)
 far = 3.0
 script = ExtResource("3_hkogh")
 mouseSelectionMask = 2
-height = 0.25
 
 [node name="StructureBuilder" type="Node" parent="Player" node_paths=PackedStringArray("structureCursor")]
 script = ExtResource("4_2yueu")
@@ -164,7 +179,7 @@ goToGizmoPop = SubResource("Curve_h5o0r")
 environment = SubResource("Environment_cey1v")
 
 [node name="ResourceField" type="Node3D" parent="."]
-transform = Transform3D(0.470734, -0.881366, -0.0400196, 0.871615, 0.471598, -0.133727, 0.136736, 0.0280683, 0.99021, -0.438472, 0.240133, 0.0200108)
+transform = Transform3D(0.470734, -0.881366, -0.0400196, 0.871615, 0.471598, -0.133727, 0.136736, 0.0280683, 0.99021, -0.859155, 0.465231, 0.033408)
 script = ExtResource("9_mesx2")
 MaxResources = 50.0
 resourceMoteMesh = SubResource("BoxMesh_oa7x1")
@@ -176,12 +191,12 @@ maxMoteScale = 1.0
 multimesh = SubResource("MultiMesh_a0w41")
 
 [node name="Base2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.993918, 0.031974, 0.10538, -0.0254809, 0.997726, -0.0623964, -0.107136, 0.0593317, 0.992473, 0.0338174, -0.5366, -0.0484378)
+transform = Transform3D(0.993918, 0.031974, 0.10538, -0.0254809, 0.997726, -0.0623964, -0.107136, 0.0593317, 0.992473, -0.0137067, -2.01956, -0.136625)
 mesh = SubResource("BoxMesh_sl2en")
 skeleton = NodePath("")
 
 [node name="Base3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.240672, -0.0608281, 0.0296165, 0.0562349, 0.240706, 0.0373949, -0.0376141, -0.0293376, 0.245407, 0.20369, -0.441386, 0.141059)
+transform = Transform3D(0.240672, -0.0608281, 0.0296165, 0.0562349, 0.240706, 0.0373949, -0.0376141, -0.0293376, 0.245407, 0.578206, -1.9234, 0.32169)
 mesh = SubResource("BoxMesh_sl2en")
 skeleton = NodePath("")
 
@@ -190,14 +205,29 @@ skeleton = NodePath("")
 [node name="GoToGizmo" parent="." instance=ExtResource("6_275rd")]
 
 [node name="Building1" parent="." instance=ExtResource("7_gan5y")]
-transform = Transform3D(0.99909, 0.0426429, 0, -0.0426429, 0.99909, 0, 0, 0, 1, 0.0247538, 0.490142, -0.0680378)
+transform = Transform3D(0.99909, 0.0426429, 0, -0.0426429, 0.99909, 0, 0, 0, 1, 0.0901032, 2.02122, -0.0680378)
 AddBuildingOnReady = true
 
+[node name="Selection" parent="Building1" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45058e-09, -0.0158432, 0)
+
+[node name="StaticBody3D" parent="Building1" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.72529e-08, -0.183431, -0.0492246)
+
+[node name="CollisionShape3D" parent="Building1/StaticBody3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.72529e-09, 0.188167, 0)
+
+[node name="BuildBay" parent="Building1" index="2"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.49012e-08, -0.0080409, 0.0418642)
+
+[node name="ResourceDropOff" parent="Building1" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0913248, -0.0398993, -0.0144713)
+
 [node name="command_center" parent="Building1" index="4"]
-transform = Transform3D(1, -3.72529e-09, 2.09548e-09, 0, 0.999852, 0.017208, 0, -0.0172082, 0.999852, 5.58794e-09, -0.00410852, -0.0462605)
+transform = Transform3D(1, 3.72529e-09, 2.21189e-09, 0, 0.999852, 0.017208, 0, -0.0172082, 0.999852, 0, -0.0288326, -0.045835)
 
 [node name="ResourceCollector" parent="." instance=ExtResource("12_fx8w5")]
-transform = Transform3D(0.179317, -0.198105, 0.963639, -3.72529e-09, 0.979516, 0.201369, -0.983791, -0.0361089, 0.175644, -0.0593883, 0.503519, -0.0187467)
+transform = Transform3D(0.179317, -0.198105, 0.963639, -3.72529e-09, 0.979516, 0.201369, -0.983791, -0.0361089, 0.175644, -0.357589, 1.97795, -0.0731001)
 
 [node name="StructureBlueprint" type="Node3D" parent="."]
 script = ExtResource("10_xw7p0")
@@ -206,7 +236,7 @@ startingPrefab = "res://Art/Mesh/refinery.tscn"
 OrientMode = 1
 
 [node name="Unit1" parent="." instance=ExtResource("14_p0qyn")]
-transform = Transform3D(-0.999991, -0.00432839, 0, 0.00432839, -0.999991, 0, 0, 0, 1, -0.0157074, -0.505898, 0.0406136)
+transform = Transform3D(-0.999991, -0.00432839, 0, 0.00432839, -0.999991, 0, 0, 0, 1, -0.0220949, -1.98162, 0.0406136)
 Team = 1
 
 [editable path="Building1"]
