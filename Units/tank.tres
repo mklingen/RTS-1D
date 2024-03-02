@@ -17,3 +17,4 @@ IsABuilding = false
 PrefabFile = "res://Scene/Prefabs/tank.tscn"
 BuildTime = 10.0
 BuildCost = 4.0
+CanDoAbilities = 1

@@ -16,3 +16,4 @@ IsABuilding = false
 PrefabFile = "res://Scene/Prefabs/scout.tscn"
 BuildTime = 2.0
 BuildCost = 1.0
+CanDoAbilities = 1

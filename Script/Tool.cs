@@ -7,6 +7,8 @@ public interface ITool
         Left, Right
     }
 
+    public UnitStats.Abilities GetAbilities();
+
     public void OnActivate();
     public void OnDeactivate();
     public void OnMouseFirstPressed(Vector2 mouseScreenPos, Vector3 mouseWorldPos, MouseButton click);

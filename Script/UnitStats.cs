@@ -37,6 +37,19 @@ public partial class UnitStats : Resource
     [Export]
     public float BuildCost = 1.0f;
 
+    [Flags]
+    public enum Abilities
+    {
+        None=0,
+        Move=1,
+        BuildUnits=2,
+        BuildStructures=4
+    }
+
+    [ExportGroup("Abilities")]
+    [Export]
+    public Abilities CanDoAbilities;
+
     public bool CanMove()
     {
         return MaxSpeed > 0;

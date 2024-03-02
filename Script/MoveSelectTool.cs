@@ -154,4 +154,9 @@ public partial class MoveSelectTool : Node, ITool
             }
         }
     }
+
+    public UnitStats.Abilities GetAbilities()
+    {
+        return UnitStats.Abilities.Move;
+    }
 }

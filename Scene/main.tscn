@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dbfq55rp55g0j"]
+[gd_scene load_steps=31 format=3 uid="uid://dbfq55rp55g0j"]
 
 [ext_resource type="Script" path="res://Script/Game.cs" id="1_ddooy"]
 [ext_resource type="Script" path="res://Script/Planet.cs" id="2_r1u44"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d0m0iao611kn8" path="res://Scene/UI/main_ui.tscn" id="5_jpid0"]
 [ext_resource type="Script" path="res://Script/MoveSelectTool.cs" id="5_t1h80"]
 [ext_resource type="PackedScene" uid="uid://do5808am1angg" path="res://Scene/Prefabs/go_to_gizmo.tscn" id="6_275rd"]
+[ext_resource type="Script" path="res://Script/UnitBuilderTool.cs" id="6_tvrdh"]
 [ext_resource type="PackedScene" uid="uid://crugiqpv1b15t" path="res://Scene/Prefabs/command_center.tscn" id="7_gan5y"]
 [ext_resource type="Script" path="res://Script/ResourceField.cs" id="9_mesx2"]
 [ext_resource type="Script" path="res://Script/StructureCursor.cs" id="10_xw7p0"]
@@ -174,6 +175,9 @@ buildingPrefab = "res://Scene/Prefabs/command_center.tscn"
 [node name="MoveSelectTool" type="Node" parent="Player"]
 script = ExtResource("5_t1h80")
 goToGizmoPop = SubResource("Curve_h5o0r")
+
+[node name="UnitBuilder" type="Node" parent="Player"]
+script = ExtResource("6_tvrdh")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_cey1v")

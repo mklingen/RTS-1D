@@ -105,4 +105,9 @@ public partial class StructurePlacement : Node, ITool
         canBuild = GetPlanet().CanBuildBuilding(mouseWorldPos);
         structureCursor.SetColor(canBuild ? goodColor : badColor);
     }
+
+    public UnitStats.Abilities GetAbilities()
+    {
+        return UnitStats.Abilities.BuildStructures;
+    }
 }

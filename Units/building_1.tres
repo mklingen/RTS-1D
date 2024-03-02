@@ -17,3 +17,4 @@ IsABuilding = true
 PrefabFile = "res://Scene/Prefabs/building_1.tscn"
 BuildTime = 10.0
 BuildCost = 1.0
+CanDoAbilities = 2

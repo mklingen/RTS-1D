@@ -58,7 +58,6 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     [Export]
     private int playerTeam = 0;
 
-    private BuildMenu buildMenu;
     private bool suppressMouseClicks;
 
     private List<ITool> tools;
@@ -94,10 +93,6 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     {
         base._Ready();
         planet = Game.Get().GetPlanet();
-        buildMenu = Game.FindChildrenRecursive<BuildMenu>(Game.Get()).FirstOrDefault();
-        if (buildMenu != null) {
-            buildMenu.Close();
-        }
         tangentFrame = planet.GetTangentFrame(GlobalPosition);
         minDepth = (planet.ProjectToSurface(GlobalPosition) - GlobalPosition).Length();
         maxDepth = minDepth + maxZoom;
@@ -225,16 +220,17 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
 
     public void OnSelect(ConstructionBay bay)
     {
-        if (buildMenu != null) {
-            buildMenu.Open(bay);
+        var unitBuilder = tools.OfType<UnitBuilderTool>().FirstOrDefault();
+        if (unitBuilder != null) {
+            unitBuilder.OnSelect(bay);
+            SetActiveTool(unitBuilder);
         }
     }
 
     public void OnDeselect(ConstructionBay bay)
     {
-        if (buildMenu != null) {
-            buildMenu.Close();
-        }
+        tools.OfType<UnitBuilderTool>().FirstOrDefault()?.OnDeselect(bay);
+        OnUICancel();
     }
 
     public void OnEvent(InputEvent inputEvent)
