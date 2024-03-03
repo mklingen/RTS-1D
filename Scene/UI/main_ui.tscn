@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0m0iao611kn8"]
+[gd_scene load_steps=8 format=3 uid="uid://d0m0iao611kn8"]
 
 [ext_resource type="Script" path="res://Scene/UI/MainUI.cs" id="1_moeis"]
 [ext_resource type="PackedScene" uid="uid://c6pqqlj63rt2p" path="res://Scene/UI/build_menu.tscn" id="2_qp3th"]
+[ext_resource type="Script" path="res://Scene/UI/Toolbar.cs" id="2_s0g7g"]
 [ext_resource type="PackedScene" uid="uid://dsbi01qhabix5" path="res://Scene/UI/queue_item.tscn" id="3_70guj"]
 [ext_resource type="PackedScene" uid="uid://bn4cvn1a4pnl1" path="res://Scene/UI/build_unit_icon.tscn" id="4_7g77u"]
+[ext_resource type="PackedScene" uid="uid://ffovo4mngdy8" path="res://Scene/UI/build_structures_menu.tscn" id="6_ktu5r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_81fan"]
 bg_color = Color(0.423529, 0.811765, 1, 0.176471)
@@ -34,23 +36,46 @@ offset_right = 1152.0
 offset_bottom = 648.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_81fan")
 
-[node name="BuildMenu" parent="." instance=ExtResource("2_qp3th")]
-custom_minimum_size = Vector2(128, 256)
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-grow_vertical = 0
-QueueItemPrefab = ExtResource("3_70guj")
-BuildButtonPrefab = ExtResource("4_7g77u")
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 291.0
+grow_horizontal = 2
 
-[node name="Resources" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
 
-[node name="ResourcesLabel" type="Label" parent="Resources"]
+[node name="Resources" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="ResourcesLabel" type="Label" parent="VBoxContainer/HBoxContainer/Resources"]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 tooltip_text = "Number of resources available."
 text = "Resources {0}RP"
 vertical_alignment = 1
+
+[node name="Toolbar" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Toolbar"]
+layout_mode = 2
+
+[node name="Toolbar" type="TabBar" parent="VBoxContainer/HBoxContainer/Toolbar/HBoxContainer"]
+layout_mode = 2
+clip_tabs = false
+tab_count = 3
+tab_0/title = "Move/Select"
+tab_1/title = "Build Structures"
+tab_2/title = "Build Units"
+script = ExtResource("2_s0g7g")
+
+[node name="BuildMenu" parent="VBoxContainer" instance=ExtResource("2_qp3th")]
+custom_minimum_size = Vector2(128, 256)
+layout_mode = 2
+QueueItemPrefab = ExtResource("3_70guj")
+BuildButtonPrefab = ExtResource("4_7g77u")
+
+[node name="BuildStructuresMenu" parent="VBoxContainer" instance=ExtResource("6_ktu5r")]
+layout_mode = 2

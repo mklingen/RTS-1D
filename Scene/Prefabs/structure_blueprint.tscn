@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://xcxqfbo6x0ba"]
+
+[ext_resource type="Script" path="res://Script/StructureCursor.cs" id="1_avgdw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o6poj"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0.529412, 0.603922, 1, 0.721569)
+
+[node name="StructureBlueprint" type="Node3D"]
+script = ExtResource("1_avgdw")
+blueprintMaterial = SubResource("StandardMaterial3D_o6poj")
+startingPrefab = "res://Art/Mesh/refinery.tscn"
+OrientMode = 1

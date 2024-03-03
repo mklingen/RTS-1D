@@ -63,6 +63,22 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
     private List<ITool> tools;
     private ITool activeTool;
 
+    private float minFOV = 0;
+    private float maxFOV = 0;
+
+    public List<ITool> GetTools()
+    {
+        return tools;
+    }
+
+    public void SetActiveToolByName(string tool)
+    {
+        ITool selected = tools.FirstOrDefault(activeTool => activeTool.GetName() == tool);
+        if (selected != null) {
+            SetActiveTool(selected);
+        }
+    }
+
     public void SetActiveTool(ITool tool)
     {
         if (activeTool != null) {
@@ -100,7 +116,9 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         cameraZoom = minDepth;
         cameraZoomVelocity = 0;
         tools = Game.FindInterfacesRecursive<ITool>(this).ToList();
-        SetActiveTool(tools.FirstOrDefault());
+        OnUICancel();
+        minFOV = Fov * 0.5f;
+        maxFOV = Fov * 1.5f;
     }
 
     private void OrientCamera()
@@ -202,6 +220,7 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         GlobalPosition += tangentFrame.Up * cameraZoom;
         LookAtFromPosition(GlobalPosition, planet.ProjectToCylinder(GlobalPosition + tangentFrame.In, 0, 0.2f), tangentFrame.Up.Rotated(tangentFrame.Left, 0.2f));
         zoom = cameraZoom;
+        Fov = ((cameraZoom - minDepth) / (maxDepth - minDepth)) * (maxFOV - minFOV) + minFOV;
     }
 
     private void HandleLeftClick()
@@ -223,14 +242,12 @@ public partial class MainCamera : Camera3D, ConstructionBay.IConstructionBaySele
         var unitBuilder = tools.OfType<UnitBuilderTool>().FirstOrDefault();
         if (unitBuilder != null) {
             unitBuilder.OnSelect(bay);
-            SetActiveTool(unitBuilder);
         }
     }
 
     public void OnDeselect(ConstructionBay bay)
     {
         tools.OfType<UnitBuilderTool>().FirstOrDefault()?.OnDeselect(bay);
-        OnUICancel();
     }
 
     public void OnEvent(InputEvent inputEvent)

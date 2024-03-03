@@ -29,7 +29,6 @@ public partial class ConstructionBay : Node3D, Unit.ISetTeam, Selectable.ISelect
     public override void _Ready()
     {
         base._Ready();
-        StartBuilding("Tank");
     }
 
     public interface IConstructionBaySelectionCallback

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://33ed4jkduxig"]
+[gd_scene load_steps=18 format=3 uid="uid://33ed4jkduxig"]
 
 [ext_resource type="Script" path="res://Script/Unit.cs" id="1_wjm0n"]
 [ext_resource type="Resource" uid="uid://cx1o8xhd6s2eo" path="res://Units/engineer.tres" id="2_g20h5"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Script/HealthBar.cs" id="5_8mfos"]
 [ext_resource type="Script" path="res://Script/Builder.cs" id="7_klcbv"]
 [ext_resource type="PackedScene" uid="uid://ddrajiaksrta3" path="res://Art/Mesh/constructor.tscn" id="7_s2ec1"]
+[ext_resource type="Resource" uid="uid://dfkemlndu2q2m" path="res://Units/building_1.tres" id="8_8w2oc"]
 
 [sub_resource type="Gradient" id="Gradient_cgk4m"]
 offsets = PackedFloat32Array(0, 0.995776)
@@ -86,6 +87,7 @@ shape = SubResource("SphereShape3D_wjhcc")
 [node name="Builder" type="Node3D" parent="OffsetRoot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0221152)
 script = ExtResource("7_klcbv")
+availableUnits = [ExtResource("8_8w2oc")]
 
 [node name="LightEffect" type="Node3D" parent="OffsetRoot/Builder"]
 visible = false

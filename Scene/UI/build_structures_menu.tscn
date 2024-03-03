@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://ffovo4mngdy8"]
+
+[ext_resource type="Script" path="res://Scene/UI/BuildStructuresMenu.cs" id="1_6g5pu"]
+[ext_resource type="PackedScene" uid="uid://dsbi01qhabix5" path="res://Scene/UI/queue_item.tscn" id="2_8fqlc"]
+[ext_resource type="PackedScene" uid="uid://bn4cvn1a4pnl1" path="res://Scene/UI/build_unit_icon.tscn" id="3_5kyck"]
+
+[node name="BuildMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_6g5pu")
+QueueItemPrefab = ExtResource("2_8fqlc")
+BuildButtonPrefab = ExtResource("3_5kyck")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -49.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BuildUnitPanel" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Units" type="VBoxContainer" parent="MarginContainer/BuildUnitPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MainLabel" type="Label" parent="MarginContainer/BuildUnitPanel/Units"]
+layout_mode = 2
+text = "BUILD"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BuildButtons" type="HBoxContainer" parent="MarginContainer/BuildUnitPanel/Units"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BuildQueue" type="HBoxContainer" parent="MarginContainer/BuildUnitPanel"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2

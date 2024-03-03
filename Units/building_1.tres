@@ -15,6 +15,7 @@ SensingShape = SubResource("SphereShape3D_uecsj")
 SensingCollisionMask = 1
 IsABuilding = true
 PrefabFile = "res://Scene/Prefabs/building_1.tscn"
+BuildCursorPrefabFile = "res://Scene/Prefabs/structure_blueprint.tscn"
 BuildTime = 10.0
 BuildCost = 1.0
 CanDoAbilities = 2

@@ -31,6 +31,9 @@ public partial class UnitStats : Resource
     [Export(PropertyHint.File, "*.tscn")]
     public string PrefabFile;
 
+    [Export(PropertyHint.File, "*.tscn")]
+    public string BuildCursorPrefabFile;
+
     [Export]
     public float BuildTime = 10.0f;
 

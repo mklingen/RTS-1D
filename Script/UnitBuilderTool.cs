@@ -16,6 +16,16 @@ public partial class UnitBuilderTool : Node, ITool
             buildMenu.Close();
         }
     }
+    public string GetName()
+    {
+        return "Build Units";
+    }
+
+    public int GetPriority()
+    {
+        return 1;
+    }
+
     public UnitStats.Abilities GetAbilities()
     {
         return UnitStats.Abilities.BuildUnits;

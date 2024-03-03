@@ -14,4 +14,8 @@ public interface ITool
     public void OnMouseFirstPressed(Vector2 mouseScreenPos, Vector3 mouseWorldPos, MouseButton click);
     public void OnMouseMove(Vector2 mouseScreenPos, Vector3 mouseWorldPos);
     public void OnMouseClick(Vector2 mouseScreenPos, Vector3 mousePos, MouseButton click);
+
+    public string GetName();
+
+    public int GetPriority();
 }

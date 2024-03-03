@@ -1,8 +1,9 @@
 using Godot;
 using System;
+using System.Linq;
 
 // Controls the player placing structures.
-public partial class StructurePlacement : Node, ITool
+public partial class StructurePlacement : Node, ITool, Builder.IBuilderSelectionCallback
 {
     [Export]
     private StructureCursor structureCursor = null;
@@ -14,17 +15,40 @@ public partial class StructurePlacement : Node, ITool
 
     private Planet planet;
 
+    private Builder builder;
+
+    private BuildStructuresMenu buildMenu;
+
+    private string buildingName;
+
     public override void _Ready()
     {
         base._Ready();
 
+        buildMenu = Game.FindChildrenRecursive<BuildStructuresMenu>(Game.Get()).FirstOrDefault();
     }
+
+    public string GetName()
+    {
+        return "Build Structures";
+    }
+    public int GetPriority()
+    {
+        return 2;
+    }
+
+    public void SetBuilder(Builder b)
+    {
+        builder = b;
+    }
+
     [ExportGroup("Prefabs")]
     [Export(PropertyHint.File, "*.tscn")] private string cursorPrefab;
     [Export(PropertyHint.File, "*.tscn")] private string buildingPrefab;
 
-    public void SetPrefabs(string cursor, string buildingAfterPlacement)
+    public void SetPrefabs(string buildingName, string cursor, string buildingAfterPlacement)
     {
+        this.buildingName = buildingName;
         structureCursor?.SetPrefab(cursor);
         buildingPrefab = buildingAfterPlacement;
     }
@@ -42,14 +66,19 @@ public partial class StructurePlacement : Node, ITool
         if (structureCursor != null) {
             structureCursor.Visible = true;
         }
-        // TODO, hook this up to UI.
-        SetPrefabs(cursorPrefab, buildingPrefab);
+
+        if (buildMenu != null) {
+            buildMenu.Open(builder);
+        }
     }
 
     public void OnDeactivate()
     {
         if (structureCursor != null) {
             structureCursor.Visible = false;
+        }
+        if (buildMenu != null) {
+            buildMenu.Close();
         }
     }
 
@@ -62,7 +91,7 @@ public partial class StructurePlacement : Node, ITool
             case ITool.MouseButton.Left:
                 structureCursor.SetColor(badColor);
                 if (canBuild) {
-                    SpawnBuilding();
+                    builder.StartBuilding(buildingName, structureCursor.GlobalPosition);
                 }
                 break;
             case ITool.MouseButton.Right:
@@ -109,5 +138,17 @@ public partial class StructurePlacement : Node, ITool
     public UnitStats.Abilities GetAbilities()
     {
         return UnitStats.Abilities.BuildStructures;
+    }
+
+    public void OnSelect(Builder bay)
+    {
+        this.builder = bay;
+    }
+
+    public void OnDeselect(Builder bay)
+    {
+       if (bay == this.builder) {
+            this.builder = null;
+       }
     }
 }

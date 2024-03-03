@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,10 @@ public partial class MoveSelectTool : Node, ITool
     [Export]
     private float moveRandomization = 0.05f;
 
+    [Signal]
+    public delegate void SelectionChangedEventHandler(Array<Selectable> selectables);
+
+
     public override void _Ready()
     {
         base._Ready();
@@ -47,6 +52,17 @@ public partial class MoveSelectTool : Node, ITool
             selectionRect.Visible = false;
         }
     }
+
+    public int GetPriority()
+    {
+        return 0;
+    }
+
+    public string GetName()
+    {
+        return "Move/Select";
+    }
+
 
     public void OnActivate()
     {
@@ -133,6 +149,9 @@ public partial class MoveSelectTool : Node, ITool
             selectionBuffer = tempSelectionBuffer;
         }
         wasPreviouslyPressingPrimaryClick = isPressingPrimaryClick;
+        var selectableArray = new Godot.Collections.Array<Selectable>();
+        selectableArray.AddRange(selectionBuffer);
+        EmitSignal(SignalName.SelectionChanged, selectableArray);
     }
 
     private void UpdateSelectionBuffer()
