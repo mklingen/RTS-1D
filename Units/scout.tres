@@ -14,6 +14,7 @@ SensingShape = SubResource("SphereShape3D_3ay16")
 SensingCollisionMask = 0
 IsABuilding = false
 PrefabFile = "res://Scene/Prefabs/scout.tscn"
+BuildCursorPrefabFile = ""
 BuildTime = 2.0
 BuildCost = 1.0
 CanDoAbilities = 1

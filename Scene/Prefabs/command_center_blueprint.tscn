@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbfoyb1m3776m"]
+
+[ext_resource type="PackedScene" uid="uid://xcxqfbo6x0ba" path="res://Scene/Prefabs/structure_blueprint.tscn" id="1_u7fgs"]
+
+[node name="CommandCenterBlueprint" instance=ExtResource("1_u7fgs")]
+startingPrefab = "res://Art/Mesh/command_center.tscn"

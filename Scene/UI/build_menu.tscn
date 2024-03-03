@@ -1,32 +1,31 @@
 [gd_scene load_steps=4 format=3 uid="uid://c6pqqlj63rt2p"]
 
-[ext_resource type="Script" path="res://Scene/UI/BuildMenu.cs" id="1_rndmv"]
-[ext_resource type="PackedScene" uid="uid://dsbi01qhabix5" path="res://Scene/UI/queue_item.tscn" id="2_7xnty"]
-[ext_resource type="PackedScene" uid="uid://bn4cvn1a4pnl1" path="res://Scene/UI/build_unit_icon.tscn" id="3_bwk0k"]
+[ext_resource type="Script" path="res://Scene/UI/BuildMenu.cs" id="1_hxdm6"]
+[ext_resource type="PackedScene" uid="uid://dsbi01qhabix5" path="res://Scene/UI/queue_item.tscn" id="2_v1jra"]
+[ext_resource type="PackedScene" uid="uid://bn4cvn1a4pnl1" path="res://Scene/UI/build_unit_icon.tscn" id="3_5f5n4"]
 
-[node name="BuildStructuresMenu" type="Control"]
+[node name="BuildMenu" type="Control"]
+custom_minimum_size = Vector2(0, 128)
 layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_hxdm6")
+QueueItemPrefab = ExtResource("2_v1jra")
+BuildButtonPrefab = ExtResource("3_5f5n4")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(0, 129)
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource("1_rndmv")
-QueueItemPrefab = ExtResource("2_7xnty")
-BuildButtonPrefab = ExtResource("3_bwk0k")
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -49.0
-offset_bottom = 49.0
-grow_horizontal = 2
-grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 64
 
 [node name="BuildUnitPanel" type="PanelContainer" parent="MarginContainer"]
 layout_mode = 2

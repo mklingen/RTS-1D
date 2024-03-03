@@ -203,6 +203,11 @@ public partial class Planet : Node3D
                 }
             }
         }
+
+        public int Length()
+        {
+            return this.Cells.Length;
+        }
     }
 
 
@@ -248,4 +253,12 @@ public partial class Planet : Node3D
         }
     }
 
+    public void RemoveBuilding(PlanetObject building)
+    {
+        for (int x = 0; x < BuildingOccupancyGrid.Length(); x++) {
+            if (BuildingOccupancyGrid[x].ObjectOccupyingCell == building) {
+                BuildingOccupancyGrid[x] = new OccupancyCell { ObjectOccupyingCell = null };
+            }
+        }
+    }
 }

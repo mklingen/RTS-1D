@@ -123,6 +123,7 @@ script = ExtResource("1_ddooy")
 [node name="Planet" type="Node3D" parent="."]
 script = ExtResource("2_r1u44")
 Radius = 2.0
+buildingPlacementResolutionDegrees = 0.1
 
 [node name="PlanetMesh" type="MeshInstance3D" parent="Planet"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
@@ -163,7 +164,7 @@ mouseSelectionMask = 2
 
 [node name="StructureBuilder" type="Node" parent="Player"]
 script = ExtResource("4_2yueu")
-cursorPrefab = "res://Art/Mesh/factory_1.tscn"
+cursorPrefab = "res://Scene/Prefabs/structure_blueprint.tscn"
 buildingPrefab = "res://Scene/Prefabs/command_center.tscn"
 
 [node name="MoveSelectTool" type="Node" parent="Player"]

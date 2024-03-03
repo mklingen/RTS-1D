@@ -14,6 +14,7 @@ SensingShape = SubResource("SphereShape3D_86qe4")
 SensingCollisionMask = 0
 IsABuilding = false
 PrefabFile = "res://Scene/Prefabs/engineer.tscn"
+BuildCursorPrefabFile = ""
 BuildTime = 10.0
 BuildCost = 3.0
 CanDoAbilities = 5

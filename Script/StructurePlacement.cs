@@ -46,10 +46,30 @@ public partial class StructurePlacement : Node, ITool, Builder.IBuilderSelection
     [Export(PropertyHint.File, "*.tscn")] private string cursorPrefab;
     [Export(PropertyHint.File, "*.tscn")] private string buildingPrefab;
 
-    public void SetPrefabs(string buildingName, string cursor, string buildingAfterPlacement)
+    private UnitStats currentStats;
+
+    private StructureCursor CreateCursor()
+    {
+        PackedScene scene = (PackedScene)ResourceLoader.Load(cursorPrefab);
+        var node = scene.Instantiate<StructureCursor>();
+        if (node == null) {
+            GD.PrintErr("Scene did not contain node3d as root.");
+            return null;
+        }
+        this.AddChild(node);
+        return node;
+    }
+
+    public void SetPrefabs(UnitStats stats, string buildingName, string cursor, string buildingAfterPlacement)
     {
         this.buildingName = buildingName;
-        structureCursor?.SetPrefab(cursor);
+        if (structureCursor == null) {
+            structureCursor = CreateCursor();
+        }
+        structureCursor.SetPrefab(cursor);
+        currentStats = stats;
+        structureCursor.Depth = stats.DefaultDepth;
+        structureCursor.Height = stats.DefaultHeight;
         buildingPrefab = buildingAfterPlacement;
     }
 
@@ -131,6 +151,8 @@ public partial class StructurePlacement : Node, ITool, Builder.IBuilderSelection
             return;
         }
         structureCursor.ForceSetPosition(mouseWorldPos);
+        structureCursor.Depth = currentStats.DefaultDepth;
+        structureCursor.Height = currentStats.DefaultHeight;
         canBuild = GetPlanet().CanBuildBuilding(mouseWorldPos);
         structureCursor.SetColor(canBuild ? goodColor : badColor);
     }

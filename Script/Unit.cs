@@ -49,7 +49,8 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     private List<Collector> collectors;
     // Resource drop offs attached to this unit.
     private List<ResourceDropOff> dropOffs;
-
+    // List of structure builders attached to this unit.
+    private List<Builder> builders;
     public List<Collector> GetCollectors()
     {
         return collectors;
@@ -100,6 +101,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         weapons = Game.FindChildrenRecursive<Weapon>(this).ToList();
         collectors = Game.FindChildrenRecursive<Collector>(this).ToList();
         dropOffs = Game.FindChildrenRecursive<ResourceDropOff>(this).ToList();
+        builders = Game.FindChildrenRecursive<Builder>(this).ToList();
         queryParameters = new PhysicsShapeQueryParameters3D();
         queryParameters.Shape = Stats.SensingShape;
         queryParameters.CollisionMask = Stats.SensingCollisionMask;
@@ -167,6 +169,9 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
                     }
                 }
             }
+        }
+        if (builders.Count > 0 && currentTask == null) {
+
         }
         return null;
     }

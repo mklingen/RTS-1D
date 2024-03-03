@@ -82,7 +82,8 @@ public partial class BuildStructuresMenu : Control
 
     private void BuildButtonUp(string unitName)
     {
-        structurePlacementTool.SetPrefabs(unitName, builder.GetUnit(unitName).BuildCursorPrefabFile, builder.GetUnit(unitName).PrefabFile);
+        UnitStats stats = builder.GetUnit(unitName);
+        structurePlacementTool.SetPrefabs(stats, unitName, stats.BuildCursorPrefabFile, stats.PrefabFile);
         structurePlacementTool.SetBuilder(builder);
     }
 

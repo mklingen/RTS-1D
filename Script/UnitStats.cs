@@ -34,11 +34,21 @@ public partial class UnitStats : Resource
     [Export(PropertyHint.File, "*.tscn")]
     public string BuildCursorPrefabFile;
 
+
+    [Export(PropertyHint.File, "*.tscn")]
+    public string ConstructionPilePrefab;
+
     [Export]
     public float BuildTime = 10.0f;
 
     [Export]
     public float BuildCost = 1.0f;
+
+    [Export]
+    public float DefaultDepth = 0.0f;
+
+    [Export]
+    public float DefaultHeight = 0.0f;
 
     [Flags]
     public enum Abilities
@@ -61,6 +71,10 @@ public partial class UnitStats : Resource
     public Unit CreateUnit(Node parent)
     {
         PackedScene scene = (PackedScene)ResourceLoader.Load(PrefabFile);
+        if (scene == null) {
+            GD.PrintErr($"Unable to load {PrefabFile}");
+            return null;
+        }
         var unit = scene.Instantiate<Unit>();
         if (unit == null) {
             GD.PrintErr("Scene did not contain Unit as root.");
@@ -68,5 +82,21 @@ public partial class UnitStats : Resource
         }
         parent.AddChild(unit);
         return unit;
+    }
+
+    public Node3D CreateConstructionPile(Node parent)
+    {
+        PackedScene scene = (PackedScene)ResourceLoader.Load(ConstructionPilePrefab);
+        if (scene == null) {
+            GD.PrintErr($"Unable to load {PrefabFile}");
+            return null;
+        }
+        var node = scene.Instantiate<Node3D>();
+        if (node == null) {
+            GD.PrintErr("Scene did not contain node as root.");
+            return null;
+        }
+        parent.AddChild(node);
+        return node;
     }
 }
