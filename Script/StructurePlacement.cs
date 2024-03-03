@@ -120,23 +120,6 @@ public partial class StructurePlacement : Node, ITool, Builder.IBuilderSelection
         }
     }
 
-    private Node3D SpawnBuilding()
-    {
-        PackedScene scene = (PackedScene)ResourceLoader.Load(buildingPrefab);
-        var node = scene.Instantiate<Node3D>();
-        if (node == null) {
-            GD.PrintErr("Scene did not contain node3d as root.");
-            return null;
-        }
-        Game.Get().AddChild(node);
-        (node as PlanetObject).ForceSetPosition(structureCursor.GlobalPosition);
-
-        if (node is Unit) {
-            Unit unit = node as Unit;
-            unit.MaybeAddBuilding();
-        }
-        return node;
-    }
 
     public void OnMouseFirstPressed(Vector2 mousePixels, Vector3 mousePos, ITool.MouseButton click)
     {

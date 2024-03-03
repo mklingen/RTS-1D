@@ -171,7 +171,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
             }
         }
         if (builders.Count > 0 && currentTask == null) {
-
+            // TODO create build task.
         }
         return null;
     }
