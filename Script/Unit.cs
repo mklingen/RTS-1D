@@ -170,8 +170,14 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
                 }
             }
         }
-        if (builders.Count > 0 && currentTask == null) {
-            // TODO create build task.
+        else if (builders.Count > 0 && currentTask == null) {
+            ConstructionPile nextBuild = builders.FirstOrDefault()?.GetCurrentPile();
+            if (nextBuild != null) {
+                DoTask(new TaskLib.BuildTask(this, builders.First(), nextBuild));
+                return currentTask;
+            } else {
+                builders.First().SetToNearestPile();
+            }
         }
         return null;
     }

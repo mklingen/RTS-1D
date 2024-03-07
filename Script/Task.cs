@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace TaskLib
 {
@@ -359,5 +360,56 @@ namespace TaskLib
             return Unit.GetCollectors().Count == 0 || Unit.GetCollectors().All(collector => collector.IsEmpty());
         }
     }
+
+
+    public class BuildTask : SequenceTask
+    {
+
+        public class WaitWhileBuildingTask : Task 
+        {
+
+            private Unit unit;
+            private Builder builder;
+            public WaitWhileBuildingTask(Unit unit, Builder builder)
+            {
+                this.unit = unit;
+                this.builder = builder;
+            }
+
+            public override void End()
+            {
+               
+            }
+
+            public override bool IsDone()
+            {
+                return this.builder.GetProgress() >= 1.0f || !this.builder.IsBuilding();
+            }
+
+            public override void Start()
+            {
+             
+            }
+
+            public override Status UpdateImpl(double dt)
+            {
+                if (IsDone()) {
+                    return Status.Success;
+                }
+                return Status.Running;
+            }
+        }
+
+        public BuildTask(Unit unit, Builder builder, ConstructionPile blueprint) :
+            base (new List<Task>
+            {
+                new GoToTask(unit, blueprint.GlobalPosition, 0.01f),
+                new WaitWhileBuildingTask(unit, builder)
+            })
+        {
+
+        }
+    }
+
 
 }

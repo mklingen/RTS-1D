@@ -45,7 +45,7 @@ public partial class BuildStructuresMenu : Control
     {
         Game.ClearChildren(buildQueueContainer);
         int idx = 0;
-        foreach (var unit in builder.GetQueue()) {
+        if (builder.GetCurrentPile() != null) { 
             QueueItem item = QueueItemPrefab.Instantiate() as QueueItem;
             buildQueueContainer.AddChild(item);
             item.Progress.Hide();
@@ -62,7 +62,7 @@ public partial class BuildStructuresMenu : Control
 
     private void QueueButtonUp(int index)
     {
-        builder.ClearQueue(index);
+        builder.CancelBuilding();
     }
 
     public void Open(Builder bay)
@@ -83,6 +83,7 @@ public partial class BuildStructuresMenu : Control
     private void BuildButtonUp(string unitName)
     {
         UnitStats stats = builder.GetUnit(unitName);
+       
         structurePlacementTool.SetPrefabs(stats, unitName, stats.BuildCursorPrefabFile, stats.PrefabFile);
         structurePlacementTool.SetBuilder(builder);
     }
@@ -99,9 +100,7 @@ public partial class BuildStructuresMenu : Control
             Close();
             return;
         }
-        if (numQueueItems != builder.GetQueue().Count()) {
-            UpdateConstructionQueue();
-        }
+        UpdateConstructionQueue();
         if (numQueueItems > 0 && headItem != null) {
             headItem.Progress.Show();
             headItem.Progress.TooltipText = $"{(int)(builder.GetProgress() * 100)}% complete.";

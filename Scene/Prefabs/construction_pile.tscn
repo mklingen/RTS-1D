@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxoxl4wbycb4w"]
+
+[ext_resource type="Script" path="res://Script/ConstructionPile.cs" id="1_g6mo0"]
+[ext_resource type="PackedScene" uid="uid://dixeg2h0bp6n0" path="res://Art/Mesh/construction_pile.tscn" id="2_0xila"]
+
+[node name="ConstructionPile" type="Node3D"]
+script = ExtResource("1_g6mo0")
+OrientMode = 1
+
+[node name="construction_pile" parent="." instance=ExtResource("2_0xila")]

@@ -11,10 +11,13 @@ public partial class Collector : Node3D
     [Export]
     private float CollectionRate = 5.0f;
 
+    private Node3D lightEffect;
+
     public override void _Ready()
     {
         base._Ready();
         currentResources = 0;
+        lightEffect = FindChild("LightEffect") as Node3D;
         Disable();
     }
 
@@ -51,11 +54,17 @@ public partial class Collector : Node3D
     public void Enable()
     {
         Visible = true;
+        if (lightEffect != null) {
+            lightEffect.Visible = true;
+        }
     }
 
     public void Disable()
     {
         Visible = false;
+        if (lightEffect != null) {
+            lightEffect.Visible = false;
+        }
     }
 
     public bool UpdateCollection(ResourceField field, float dt)

@@ -12,16 +12,18 @@ public partial class Builder : Node3D, Unit.ISetTeam, Selectable.ISelectionInter
     private UnitStats[] availableUnits = new UnitStats[0];
 
     [Export]
-    private int queueSize = 5;
-
-    [Export]
     private float buildSpeed = 1.0f;
 
-    public struct BuildingBluePrint
+    [Export]
+    private float buildRadius = 0.25f;
+
+    private ConstructionPile currentPile = null;
+
+    private Node3D lightEffect;
+
+    public ConstructionPile GetCurrentPile()
     {
-        public UnitStats Unit;
-        public Vector3 Location;
-        public Node3D Pile;
+        return currentPile;
     }
 
     public interface IBuilderSelectionCallback
@@ -29,10 +31,6 @@ public partial class Builder : Node3D, Unit.ISetTeam, Selectable.ISelectionInter
         public void OnSelect(Builder bay);
         public void OnDeselect(Builder bay);
     }
-
-    private List<BuildingBluePrint> constructionQueue = new List<BuildingBluePrint>();
-
-    private float startedBuildingAt = 0;
 
     public int Team = 0;
 
@@ -42,6 +40,7 @@ public partial class Builder : Node3D, Unit.ISetTeam, Selectable.ISelectionInter
     public override void _Ready()
     {
         base._Ready();
+        lightEffect = FindChild("LightEffect") as Node3D;
     }
 
     public IEnumerable<UnitStats> GetAvailableUnits()
@@ -50,22 +49,12 @@ public partial class Builder : Node3D, Unit.ISetTeam, Selectable.ISelectionInter
             yield return unit;
         }
     }
-
-    public IEnumerable<BuildingBluePrint> GetQueue()
-    {
-        foreach (var unit in constructionQueue) {
-            yield return unit;
-        }
-    }
-
     public float GetProgress()
     {
-        if (constructionQueue.Count == 0) {
-            return 0.0f;
+        if (currentPile == null) {
+            return 0;
         }
-        float time = Game.GetTime();
-        float alpha = (time - startedBuildingAt) / (constructionQueue.First().Unit.BuildTime / buildSpeed);
-        return alpha;
+        return currentPile.ConstructionProgress / currentPile.Unit.BuildTime;
     }
 
     public bool StartBuilding(string name, Vector3 pos)
@@ -75,32 +64,20 @@ public partial class Builder : Node3D, Unit.ISetTeam, Selectable.ISelectionInter
             GD.PrintErr($"Unit with name {name} does not exist.");
             return false;
         }
-        if (constructionQueue.Count > queueSize) {
-            GD.Print($"Queue size exceeded.");
-            return false;
-        }
 
-        Node3D pile = stat.CreateConstructionPile(Game.Get());
+        ConstructionPile pile = stat.CreateConstructionPile(Game.Get(), Team);
         pile.GlobalPosition = pos;
-        if (pile is PlanetObject) {
-            var planetObject = pile as PlanetObject;
-            planetObject.ForceSetPosition(pile.GlobalPosition);
-            planetObject.Depth = stat.DefaultDepth;
-            planetObject.Height = stat.DefaultHeight;
-            Game.Get().GetPlanet().AddBuilding(planetObject, planetObject.GlobalPosition);
-        }
-        constructionQueue.Add(new BuildingBluePrint { Unit = stat, Location = pos, Pile = pile});
-
+        pile.ForceSetPosition(pile.GlobalPosition);
+        pile.Depth = stat.DefaultDepth;
+        pile.Height = stat.DefaultHeight;
+        Game.Get().GetPlanet().AddBuilding(pile, pile.GlobalPosition);
         GD.Print("Added unit to queue.");
+        if (currentPile == null) {
+            currentPile = pile;
+        }
         return true;
     }
 
-    public void EnterCurrentBuildingZone()
-    {
-        if (constructionQueue.Count == 1) {
-            startedBuildingAt = Game.GetTime();
-        }
-    }
 
     public UnitStats GetUnit(string name)
     {
@@ -109,71 +86,65 @@ public partial class Builder : Node3D, Unit.ISetTeam, Selectable.ISelectionInter
 
     public void BuildUnit()
     {
-        if (constructionQueue.Count == 0) {
-            GD.PrintErr("Queue is empty.");
+        if (currentPile == null) {
             return;
         }
-        BuildingBluePrint unit = constructionQueue.First();
-        constructionQueue.RemoveAt(0);
-        Unit created = unit.Unit.CreateUnit(Game.Get());
-        if (created != null) {
-            created.GlobalRotation = GlobalRotation;
-            created.ForceSetPosition(unit.Location, true);
-            created.Depth = unit.Unit.DefaultDepth;
-            created.Height = unit.Unit.DefaultHeight;
-            created.Team = Team;
-            created.MaybeAddBuilding();
-            Game.Get().GetTeam(Team).Resources -= unit.Unit.BuildCost;
-            GD.Print("Created unit.");
-            unit.Pile.QueueFree();
-        }
-        else {
-            GD.PrintErr("Unit was null.");
-        }
+        Unit created = currentPile.BuildUnit();
+        currentPile = null;
+    }
 
-        if (constructionQueue.Count > 0) {
-            startedBuildingAt = Game.GetTime();
-        }
+    public bool IsBuilding()
+    {
+        return currentPile != null && (GlobalPosition - currentPile.GlobalPosition).Length() < buildRadius;
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (constructionQueue.Count > 0) {
+        if (currentPile != null && currentPile.NativeInstance.ToInt64() == 0x0) {
+            currentPile = null;
+        }
+        if (IsBuilding()) {
+            if (lightEffect != null) {
+                lightEffect.Visible = true;
+            }
             float progress = GetProgress();
-            if (progress > 1.0f && constructionQueue[0].Unit.BuildCost < Game.Get().GetTeam(Team).Resources) {
+            if (progress > 1.0f && currentPile.Unit.BuildCost < Game.Get().GetTeam(Team).Resources) {
                 BuildUnit();
+            } else {
+                currentPile.AddProgress((float)(delta * buildSpeed));
+            }
+        } else {
+            if (lightEffect != null) {
+                lightEffect.Visible = false;
             }
         }
+    }
+
+    public ConstructionPile SearchNearestPile()
+    {
+        ConstructionPile closest = null;
+        float closestDist = float.MaxValue;
+        foreach (ConstructionPile pile in Game.FindChildrenRecursive<ConstructionPile>(Game.Get())) {
+            if (pile.Team == Team) {
+                float dist = (pile.GlobalPosition - GlobalPosition).LengthSquared();
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = pile;
+                }
+            }
+        }
+        return closest;
+    }
+
+    public void SetToNearestPile()
+    {
+        currentPile = SearchNearestPile();
     }
 
     public void SetTeam(int team)
     {
         Team = team;
-    }
-
-    public bool ClearQueue(int idx)
-    {
-        // If index is 0, the current unit is canceled.
-        if (idx == 0) {
-            var front = constructionQueue.First();
-            Game.Get().GetPlanet().RemoveBuilding(front.Pile as PlanetObject);
-            front.Pile.QueueFree();
-            constructionQueue.RemoveAt(0);
-            if (constructionQueue.Count > 0) {
-                startedBuildingAt = Game.GetTime();
-            }
-            return true;
-        }
-        if (idx > 0 && idx < constructionQueue.Count) {
-            var item = constructionQueue.ElementAt(idx);
-            Game.Get().GetPlanet().RemoveBuilding(item.Pile as PlanetObject);
-            item.Pile.QueueFree();
-            // Otherwise, some othe runit is canceled.
-            constructionQueue.RemoveAt(idx);
-            return true;
-        }
-        return false;
     }
 
     public int GetTeam()
@@ -194,4 +165,12 @@ public partial class Builder : Node3D, Unit.ISetTeam, Selectable.ISelectionInter
             selector.OnSelect(this);
         }
     }
+
+    public void CancelBuilding()
+    {
+        if (currentPile != null) {
+            currentPile.Destroy();
+        } 
+    }
+
 }

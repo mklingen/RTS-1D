@@ -84,18 +84,20 @@ public partial class UnitStats : Resource
         return unit;
     }
 
-    public Node3D CreateConstructionPile(Node parent)
+    public ConstructionPile CreateConstructionPile(Node parent, int team)
     {
         PackedScene scene = (PackedScene)ResourceLoader.Load(ConstructionPilePrefab);
         if (scene == null) {
             GD.PrintErr($"Unable to load {PrefabFile}");
             return null;
         }
-        var node = scene.Instantiate<Node3D>();
+        var node = scene.Instantiate<ConstructionPile>();
         if (node == null) {
-            GD.PrintErr("Scene did not contain node as root.");
+            GD.PrintErr("Scene did not contain ConstructionPile as root.");
             return null;
         }
+        node.Unit = this;
+        node.Team = team;
         parent.AddChild(node);
         return node;
     }
