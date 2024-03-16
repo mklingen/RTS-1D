@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhepae5hmplmp"]
+
+[ext_resource type="PackedScene" uid="uid://crugiqpv1b15t" path="res://Scene/Prefabs/Buildings/building.tscn" id="1_2m31u"]
+[ext_resource type="PackedScene" uid="uid://dtxxatikr85a7" path="res://Art/Mesh/refinery.tscn" id="2_hrmfj"]
+[ext_resource type="Resource" uid="uid://gten1safedr2" path="res://Units/refinery.tres" id="2_rrt6u"]
+[ext_resource type="Resource" uid="uid://c5ategvaqwiwn" path="res://Units/collector.tres" id="5_j456m"]
+[ext_resource type="Script" path="res://Script/ResourceDropOff.cs" id="10_8wi50"]
+
+[node name="Building1" instance=ExtResource("1_2m31u")]
+Stats = ExtResource("2_rrt6u")
+
+[node name="CollisionShape3D" parent="StaticBody3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0289339, 0.0498688, -0.0704114)
+
+[node name="refinery" parent="." index="2" instance=ExtResource("2_hrmfj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.001, -0.053)
+
+[node name="ResourceDropOff" type="Node3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0274598, 0.00395215, 0.0151187)
+script = ExtResource("10_8wi50")
+collectorStats = ExtResource("5_j456m")

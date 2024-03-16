@@ -1,15 +1,15 @@
 [gd_scene load_steps=16 format=3 uid="uid://don28ndw5diak"]
 
-[ext_resource type="Script" path="res://Script/Unit.cs" id="1_ld121"]
-[ext_resource type="Resource" uid="uid://cjt5f3xp1amgm" path="res://Units/tank.tres" id="2_vvo4g"]
-[ext_resource type="Script" path="res://Script/Selectable.cs" id="2_yv3de"]
-[ext_resource type="Script" path="res://Script/OffsetRoot.cs" id="3_ks4cs"]
-[ext_resource type="Script" path="res://Script/HealthBar.cs" id="3_l75ts"]
-[ext_resource type="Script" path="res://Script/SelectionBar.cs" id="4_x6hmx"]
-[ext_resource type="Script" path="res://Script/Weapon.cs" id="5_45rxc"]
-[ext_resource type="Resource" uid="uid://bel7fh675uqvi" path="res://Weapons/tank_cannon.tres" id="6_md20p"]
-[ext_resource type="PackedScene" uid="uid://b3bwo18wnsuhp" path="res://Art/Mesh/tank_turret_1.tscn" id="8_7cv3u"]
-[ext_resource type="PackedScene" uid="uid://d0i7u3vbldq4k" path="res://Art/Mesh/tank_body.tscn" id="9_xxksl"]
+[ext_resource type="Script" path="res://Script/Unit.cs" id="1_6t54e"]
+[ext_resource type="Resource" uid="uid://cjt5f3xp1amgm" path="res://Units/tank.tres" id="2_hl1hx"]
+[ext_resource type="Script" path="res://Script/OffsetRoot.cs" id="3_gptxg"]
+[ext_resource type="Script" path="res://Script/Selectable.cs" id="4_jdqlo"]
+[ext_resource type="Script" path="res://Script/SelectionBar.cs" id="5_y4cap"]
+[ext_resource type="Script" path="res://Script/HealthBar.cs" id="6_435v0"]
+[ext_resource type="Script" path="res://Script/Weapon.cs" id="7_ltxu5"]
+[ext_resource type="Resource" uid="uid://bel7fh675uqvi" path="res://Weapons/tank_cannon.tres" id="8_awam1"]
+[ext_resource type="PackedScene" uid="uid://b3bwo18wnsuhp" path="res://Art/Mesh/tank_turret_1.tscn" id="9_at1bo"]
+[ext_resource type="PackedScene" uid="uid://d0i7u3vbldq4k" path="res://Art/Mesh/tank_body.tscn" id="10_w8nbj"]
 
 [sub_resource type="Gradient" id="Gradient_bjel0"]
 offsets = PackedFloat32Array(0, 0.995776)
@@ -36,19 +36,19 @@ repeat = 2
 [sub_resource type="SphereShape3D" id="SphereShape3D_wjhcc"]
 radius = 0.01
 
-[node name="Unit1" type="Node3D"]
-script = ExtResource("1_ld121")
-Stats = ExtResource("2_vvo4g")
+[node name="Tank" type="Node3D"]
+script = ExtResource("1_6t54e")
+Stats = ExtResource("2_hl1hx")
 setNominalHeightOnStart = true
 startRandomOffset = 0.005
 startDepthRandomOffset = 0.05
 
 [node name="OffsetRoot" type="Node3D" parent="."]
-script = ExtResource("3_ks4cs")
+script = ExtResource("3_gptxg")
 
 [node name="Selection" type="Node3D" parent="OffsetRoot"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-script = ExtResource("2_yv3de")
+script = ExtResource("4_jdqlo")
 
 [node name="Selection" type="Sprite3D" parent="OffsetRoot/Selection"]
 transform = Transform3D(0.999987, 1.26943e-08, -0.00502651, -2.54659e-08, 0.5, -1.52957e-08, 0.00502651, 7.71174e-09, 0.999987, -1.26893e-08, -0.016098, -1.49012e-08)
@@ -56,7 +56,7 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = SubResource("GradientTexture2D_jyahk")
-script = ExtResource("4_x6hmx")
+script = ExtResource("5_y4cap")
 
 [node name="Health" type="Sprite3D" parent="OffsetRoot/Selection/Selection"]
 transform = Transform3D(1, 6.97037e-08, 2.56114e-09, 3.69619e-09, 1, 0, -1.02445e-08, -1.49012e-08, 1, 2.39816e-08, -5.96046e-08, 0.000495449)
@@ -64,7 +64,7 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = SubResource("GradientTexture2D_imqgy")
-script = ExtResource("3_l75ts")
+script = ExtResource("6_435v0")
 highHealthColor = Color(0, 1, 0, 1)
 midHealthColor = Color(1, 0.929412, 0.403922, 1)
 midHealthThreshold = 0.75
@@ -73,10 +73,10 @@ lowHealthThreshold = 0.5
 
 [node name="Weapon" type="Node3D" parent="OffsetRoot"]
 transform = Transform3D(1, 1.09721e-08, 5.82077e-09, 5.47152e-09, 1, 0, 4.88944e-09, 2.98023e-08, 1, 0, 0.01, 0)
-script = ExtResource("5_45rxc")
-Stats = ExtResource("6_md20p")
+script = ExtResource("7_ltxu5")
+Stats = ExtResource("8_awam1")
 
-[node name="tank_turret_1" parent="OffsetRoot/Weapon" instance=ExtResource("8_7cv3u")]
+[node name="tank_turret_1" parent="OffsetRoot/Weapon" instance=ExtResource("9_at1bo")]
 transform = Transform3D(-1, -1.73472e-16, -8.74228e-08, 2.62856e-24, 1, 8.27181e-23, 8.74228e-08, 0, -1, 1.38778e-17, -0.0199934, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="OffsetRoot"]
@@ -84,5 +84,5 @@ transform = Transform3D(-1, -1.73472e-16, -8.74228e-08, 2.62856e-24, 1, 8.27181e
 [node name="CollisionShape3D" type="CollisionShape3D" parent="OffsetRoot/StaticBody3D"]
 shape = SubResource("SphereShape3D_wjhcc")
 
-[node name="tank_body" parent="OffsetRoot" instance=ExtResource("9_xxksl")]
+[node name="tank_body" parent="OffsetRoot" instance=ExtResource("10_w8nbj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00999345, 0)

@@ -1,13 +1,13 @@
 [gd_scene load_steps=17 format=3 uid="uid://cfknavkpg6nb7"]
 
-[ext_resource type="Resource" uid="uid://c5ategvaqwiwn" path="res://Units/collector.tres" id="2_y0orq"]
-[ext_resource type="Script" path="res://Script/Unit.cs" id="2_yewtg"]
-[ext_resource type="Script" path="res://Script/OffsetRoot.cs" id="3_dsssf"]
-[ext_resource type="Script" path="res://Script/Selectable.cs" id="4_uu742"]
-[ext_resource type="Script" path="res://Script/SelectionBar.cs" id="5_aqoh4"]
-[ext_resource type="Script" path="res://Script/HealthBar.cs" id="6_e0h5a"]
-[ext_resource type="Script" path="res://Script/Collector.cs" id="7_q8aqu"]
-[ext_resource type="PackedScene" uid="uid://bylr8aa5fy8da" path="res://Art/Mesh/miner.tscn" id="8_qg4d5"]
+[ext_resource type="Script" path="res://Script/Unit.cs" id="1_q8olf"]
+[ext_resource type="Resource" uid="uid://c5ategvaqwiwn" path="res://Units/collector.tres" id="2_a6gxj"]
+[ext_resource type="Script" path="res://Script/OffsetRoot.cs" id="3_ay12r"]
+[ext_resource type="Script" path="res://Script/Selectable.cs" id="4_aq5hp"]
+[ext_resource type="Script" path="res://Script/SelectionBar.cs" id="5_vo720"]
+[ext_resource type="Script" path="res://Script/HealthBar.cs" id="6_wxjpf"]
+[ext_resource type="Script" path="res://Script/Collector.cs" id="7_1p8a5"]
+[ext_resource type="PackedScene" uid="uid://bylr8aa5fy8da" path="res://Art/Mesh/miner.tscn" id="8_p480u"]
 
 [sub_resource type="Gradient" id="Gradient_cgk4m"]
 offsets = PackedFloat32Array(0, 0.995776)
@@ -57,17 +57,17 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [node name="ResourceCollector" type="Node3D"]
-script = ExtResource("2_yewtg")
-Stats = ExtResource("2_y0orq")
+script = ExtResource("1_q8olf")
+Stats = ExtResource("2_a6gxj")
 startRandomOffset = 0.005
 startDepthRandomOffset = 0.05
 
 [node name="OffsetRoot" type="Node3D" parent="."]
-script = ExtResource("3_dsssf")
+script = ExtResource("3_ay12r")
 
 [node name="Selection" type="Node3D" parent="OffsetRoot"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-script = ExtResource("4_uu742")
+script = ExtResource("4_aq5hp")
 
 [node name="Selection" type="Sprite3D" parent="OffsetRoot/Selection"]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, -1.26893e-08, -0.016098, -1.49012e-08)
@@ -75,7 +75,7 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = SubResource("GradientTexture2D_jyahk")
-script = ExtResource("5_aqoh4")
+script = ExtResource("5_vo720")
 
 [node name="Health" type="Sprite3D" parent="OffsetRoot/Selection/Selection"]
 transform = Transform3D(1, 6.97037e-08, 2.56114e-09, 3.69619e-09, 1, 0, -1.02445e-08, -1.49012e-08, 1, 2.39816e-08, -5.96046e-08, 0.000495449)
@@ -83,7 +83,7 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = SubResource("GradientTexture2D_imqgy")
-script = ExtResource("6_e0h5a")
+script = ExtResource("6_wxjpf")
 highHealthColor = Color(0, 1, 0, 1)
 midHealthColor = Color(1, 0.929412, 0.403922, 1)
 midHealthThreshold = 0.75
@@ -97,7 +97,7 @@ shape = SubResource("SphereShape3D_wjhcc")
 
 [node name="Collector" type="Node3D" parent="OffsetRoot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00150261, -0.0333362)
-script = ExtResource("7_q8aqu")
+script = ExtResource("7_1p8a5")
 
 [node name="LightEffect" type="Node3D" parent="OffsetRoot/Collector"]
 visible = false
@@ -125,5 +125,5 @@ light_color = Color(0.0588235, 1, 0, 1)
 light_energy = 0.5
 omni_range = 0.1
 
-[node name="miner" parent="OffsetRoot" instance=ExtResource("8_qg4d5")]
+[node name="miner" parent="OffsetRoot" instance=ExtResource("8_p480u")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.00779462, 0)

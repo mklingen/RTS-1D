@@ -3,11 +3,37 @@
 [ext_resource type="Texture2D" uid="uid://du3ocaqqiid6r" path="res://icon.svg" id="1_vdebb"]
 
 [node name="BuildUnitIcon" type="Button"]
-custom_minimum_size = Vector2(64, 128)
-text = "
-UNIT NAME"
+custom_minimum_size = Vector2(80, 128)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_right = 32.0
+offset_bottom = 128.0
+grow_horizontal = 2
 icon = ExtResource("1_vdebb")
 flat = true
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+
+[node name="UnitNameLabel" type="Label" parent="."]
+custom_minimum_size = Vector2(80, 64)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -64.0
+offset_right = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 15
+text = "UNIT NAME"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2

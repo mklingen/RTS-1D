@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponStats" load_steps=3 format=3 uid="uid://cckyw6sia6nqa"]
+
+[ext_resource type="PackedScene" uid="uid://teqo7w7edpwb" path="res://Scene/Prefabs/scout_rocket.tscn" id="1_quaer"]
+[ext_resource type="Script" path="res://Script/WeaponStats.cs" id="1_woaku"]
+
+[resource]
+script = ExtResource("1_woaku")
+Name = "Scout Rockets"
+DamagePerShot = 1.0
+ArmorPiercing = 0.0
+ShotTime = 0.5
+MaxRange = 0.25
+MinRange = 0.0
+BulletPrefab = ExtResource("1_quaer")

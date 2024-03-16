@@ -24,6 +24,14 @@ public partial class Game : Node3D
     /// </summary>
     private Dictionary<int, Team> Teams = new Dictionary<int, Team>();
 
+    private Dictionary<int, Color> DefaultTeamColors = new Dictionary<int, Color>
+    {
+        {0, new Color(0, 0, 1) },
+        {1, new Color(1, 0, 0) },
+        {2, new Color(0, 1, 0) },
+        {3, new Color(1, 1, 0) }
+    };
+
     /// <summary>
     /// Represents a team in the game.
     /// </summary>
@@ -84,6 +92,9 @@ public partial class Game : Node3D
                 }
             }
         }
+
+        public Color Color;
+        public StandardMaterial3D TeamColorMaterial;
     }
 
     /// <summary>
@@ -92,14 +103,9 @@ public partial class Game : Node3D
     /// <param name="unit">The unit to add to the team.</param>
     public void AddUnit(Unit unit)
     {
-        // Check if the Teams dictionary contains the team index of the unit
-        if (!Teams.ContainsKey(unit.Team)) {
-            // If the team doesn't exist, create a new team entry with an empty list of units.
-            Teams[unit.Team] = new Team { Index = unit.Team, Resources = 0.0f, Units = new List<Unit>() };
-        }
-
+        var team = GetTeam(unit.Team);
         // Add the unit to the corresponding team's list of units
-        Teams[unit.Team].AddUnit(unit);
+        team.AddUnit(unit);
     }
 
     /// <summary>
@@ -108,7 +114,9 @@ public partial class Game : Node3D
     public Team GetTeam(int idx)
     {
         if (!Teams.ContainsKey(idx)) {
-            Teams[idx] = new Team() { Index = idx, Resources = 0.0f, Units = new List<Unit>() };
+            Teams[idx] = new Team() { Index = idx, Resources = 100.0f, Units = new List<Unit>(), 
+                                     Color = DefaultTeamColors[idx]
+            };
         }
         return Teams[idx];
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 
+[GlobalClass]
 public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
 {
     [Signal]
@@ -40,8 +41,9 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     [Export]
     private State state;
 
+    private int _team;
     [Export]
-    public int Team { get; set; }
+    public int Team { get { return _team;  } set { _team = value; ApplyTeamColor(); } }
 
     // List of weapons attached to this unit.
     private List<Weapon> weapons;
@@ -56,7 +58,30 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         return collectors;
     }
 
-    public List<Weapon> GetWeapons()
+
+    public void ApplyTeamColor()
+    {
+        var meshes = Game.FindChildrenRecursive<MeshInstance3D>(this);
+        foreach (MeshInstance3D mesh in meshes) {
+
+            if (mesh.GetSurfaceOverrideMaterialCount() > 1) {
+                StandardMaterial3D material = mesh.GetSurfaceOverrideMaterial(1) as StandardMaterial3D;
+                if (material != null && Game.Get() != null && Game.Get().GetTeam(Team) != null) {
+                    var team = Game.Get().GetTeam(Team);
+                    if (team.TeamColorMaterial == null) {
+                        team.TeamColorMaterial = material.Duplicate() as StandardMaterial3D;
+                        team.TeamColorMaterial.AlbedoColor = team.Color;
+                        
+                    }
+                    mesh.SetSurfaceOverrideMaterial(1, team.TeamColorMaterial);
+                }
+                
+            }
+
+        }
+    }
+
+        public List<Weapon> GetWeapons()
     {
         return weapons;
     }
@@ -114,6 +139,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         if (AddBuildingOnReady) {
             MaybeAddBuilding();
         }
+        ApplyTeamColor();
     }
 
     public override void _Process(double delta)

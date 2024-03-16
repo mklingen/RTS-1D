@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bp47lfw8nqp5q"]
+[gd_resource type="Resource" script_class="UnitStats" load_steps=3 format=3 uid="uid://bp47lfw8nqp5q"]
 
 [ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_xk368"]
 
@@ -11,9 +11,9 @@ MaxSpeed = 4.0
 MaxHealth = 25.0
 Armor = 0.0
 SensingShape = SubResource("SphereShape3D_3ay16")
-SensingCollisionMask = 0
+SensingCollisionMask = 1
 IsABuilding = false
-PrefabFile = "res://Scene/Prefabs/scout.tscn"
+PrefabFile = "res://Scene/Prefabs/Units/scout.tscn"
 BuildCursorPrefabFile = ""
 ConstructionPilePrefab = ""
 BuildTime = 2.0

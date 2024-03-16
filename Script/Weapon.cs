@@ -4,7 +4,7 @@ using System;
 public partial class Weapon : Node3D
 {
     // All weapons of the same type share the same stats.
-    [Export] public WeaponStats Stats;
+    [Export(PropertyHint.ResourceType, "WeaponStats")] public WeaponStats Stats;
     // The time the weapon last fired a shot.
     private float timeLastShot = 0;
     private float randomTimeOffset = 0;

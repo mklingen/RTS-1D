@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponStats" load_steps=3 format=3 uid="uid://cnhrcb0xfi15l"]
+
+[ext_resource type="PackedScene" uid="uid://gbve4domxvux" path="res://Scene/Prefabs/artillery_bullet.tscn" id="1_31du1"]
+[ext_resource type="Script" path="res://Script/WeaponStats.cs" id="1_me2bx"]
+
+[resource]
+script = ExtResource("1_me2bx")
+Name = "Artillery Gun"
+DamagePerShot = 100.0
+ArmorPiercing = 10.0
+ShotTime = 5.0
+MaxRange = 2.0
+MinRange = 0.25
+BulletPrefab = ExtResource("1_31du1")

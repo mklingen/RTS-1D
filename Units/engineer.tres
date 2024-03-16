@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://cx1o8xhd6s2eo"]
+[gd_resource type="Resource" script_class="UnitStats" load_steps=3 format=3 uid="uid://cx1o8xhd6s2eo"]
 
 [ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_nndn4"]
 
@@ -13,7 +13,7 @@ Armor = 0.0
 SensingShape = SubResource("SphereShape3D_86qe4")
 SensingCollisionMask = 0
 IsABuilding = false
-PrefabFile = "res://Scene/Prefabs/engineer.tscn"
+PrefabFile = "res://Scene/Prefabs/Units/engineer.tscn"
 BuildCursorPrefabFile = ""
 ConstructionPilePrefab = ""
 BuildTime = 10.0

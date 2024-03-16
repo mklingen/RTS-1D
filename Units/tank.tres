@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://cjt5f3xp1amgm"]
+[gd_resource type="Resource" script_class="UnitStats" load_steps=3 format=3 uid="uid://cjt5f3xp1amgm"]
 
 [ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_yj128"]
 
@@ -14,7 +14,7 @@ Armor = 1.0
 SensingShape = SubResource("SphereShape3D_uecsj")
 SensingCollisionMask = 1
 IsABuilding = false
-PrefabFile = "res://Scene/Prefabs/tank.tscn"
+PrefabFile = "res://Scene/Prefabs/Units/tank.tscn"
 BuildCursorPrefabFile = ""
 ConstructionPilePrefab = ""
 BuildTime = 10.0

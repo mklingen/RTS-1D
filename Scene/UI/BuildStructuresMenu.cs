@@ -34,7 +34,7 @@ public partial class BuildStructuresMenu : Control
     {
         foreach (var unit in builder.GetAvailableUnits()) {
             Button button = BuildButtonPrefab.Instantiate() as Button;
-            button.Text = $"{unit.Name}\n{(int)(unit.BuildCost)}RP";
+            (button.GetChild(0) as Label).Text = $"{unit.Name}\n{(int)(unit.BuildCost)}RP";
             button.ButtonUp += () => BuildButtonUp(unit.Name);
             button.TooltipText = $"Build a {unit.Name} for {(int)(unit.BuildCost)} RP.";
             buttonContainer.AddChild(button);

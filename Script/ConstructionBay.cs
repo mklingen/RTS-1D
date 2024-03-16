@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 public partial class ConstructionBay : Node3D, Unit.ISetTeam, Selectable.ISelectionInterface
@@ -92,6 +93,7 @@ public partial class ConstructionBay : Node3D, Unit.ISetTeam, Selectable.ISelect
         if (created != null) {
             created.GlobalRotation = GlobalRotation;
             created.ForceSetPosition(GlobalPosition, true);
+            created.GoTo(GlobalPosition + Game.RandomVector3(0.1f));
             created.Team = Team;
             Game.Get().GetTeam(Team).Resources -= unit.BuildCost;
             GD.Print("Created unit.");
@@ -101,9 +103,12 @@ public partial class ConstructionBay : Node3D, Unit.ISetTeam, Selectable.ISelect
 
         if (constructionQueue.Count > 0) {
             startedBuildingAt = Game.GetTime();
+        } else {
+            startedBuildingAt = -1;
         }
         if (DoRepeat) {
             constructionQueue.Add(unit);
+            startedBuildingAt = Game.GetTime();
         }
     }
 

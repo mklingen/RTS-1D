@@ -1,0 +1,19 @@
+[gd_scene load_steps=7 format=3 uid="uid://djyc1jrdao1tu"]
+
+[ext_resource type="PackedScene" uid="uid://crugiqpv1b15t" path="res://Scene/Prefabs/Buildings/building.tscn" id="1_4iyq7"]
+[ext_resource type="PackedScene" uid="uid://dkweqgia0geex" path="res://Art/Mesh/factory_1.tscn" id="2_s0b2u"]
+[ext_resource type="Script" path="res://Script/ConstructionBay.cs" id="3_d065a"]
+[ext_resource type="Resource" uid="uid://cjt5f3xp1amgm" path="res://Units/tank.tres" id="4_xbu56"]
+[ext_resource type="Resource" uid="uid://bp47lfw8nqp5q" path="res://Units/scout.tres" id="5_cf800"]
+[ext_resource type="Resource" uid="uid://bbr5y2ej1j46w" path="res://Units/artillery.tres" id="6_svexq"]
+
+[node name="Building1" instance=ExtResource("1_4iyq7")]
+
+[node name="factory1" parent="." index="2" instance=ExtResource("2_s0b2u")]
+transform = Transform3D(-0.998794, 0, 0.0490937, 0, 1, 0, -0.0490937, 0, -0.998794, 0.004, -0.005, -0.074)
+
+[node name="BuildBay" type="Node3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05)
+script = ExtResource("3_d065a")
+availableUnits = [ExtResource("5_cf800"), ExtResource("4_xbu56"), ExtResource("6_svexq")]
+BuildMenuName = "Factory"

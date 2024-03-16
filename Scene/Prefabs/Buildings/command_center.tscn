@@ -1,0 +1,18 @@
+[gd_scene load_steps=6 format=3 uid="uid://cnnywlvcqvuws"]
+
+[ext_resource type="PackedScene" uid="uid://crugiqpv1b15t" path="res://Scene/Prefabs/Buildings/building.tscn" id="1_jloxt"]
+[ext_resource type="Script" path="res://Script/ConstructionBay.cs" id="6_5588d"]
+[ext_resource type="Resource" uid="uid://cx1o8xhd6s2eo" path="res://Units/engineer.tres" id="8_rwyxw"]
+[ext_resource type="Resource" uid="uid://bp47lfw8nqp5q" path="res://Units/scout.tres" id="9_owtk4"]
+[ext_resource type="PackedScene" uid="uid://d13w3q347slhq" path="res://Art/Mesh/command_center.tscn" id="10_5iapf"]
+
+[node name="Building1" instance=ExtResource("1_jloxt")]
+
+[node name="command_center" parent="." index="2" instance=ExtResource("10_5iapf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0643118)
+
+[node name="BuildBay" type="Node3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0145378, 0.0279248)
+script = ExtResource("6_5588d")
+availableUnits = [ExtResource("8_rwyxw"), ExtResource("9_owtk4")]
+BuildMenuName = "Command Center"

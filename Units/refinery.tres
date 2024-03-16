@@ -1,24 +1,24 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dfkemlndu2q2m"]
+[gd_resource type="Resource" script_class="UnitStats" load_steps=3 format=3 uid="uid://gten1safedr2"]
 
-[ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_ok32y"]
+[ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_e7wpo"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uecsj"]
 radius = 0.25
 
 [resource]
-script = ExtResource("1_ok32y")
-Name = "Command Center"
+script = ExtResource("1_e7wpo")
+Name = "Refinery"
 MaxSpeed = 0.0
 MaxHealth = 200.0
 Armor = 1.0
 SensingShape = SubResource("SphereShape3D_uecsj")
 SensingCollisionMask = 1
 IsABuilding = true
-PrefabFile = "res://Scene/Prefabs/Buildings/command_center.tscn"
-BuildCursorPrefabFile = "res://Art/Mesh/command_center.tscn"
+PrefabFile = "res://Scene/Prefabs/Buildings/refinery.tscn"
+BuildCursorPrefabFile = "res://Art/Mesh/refinery.tscn"
 ConstructionPilePrefab = "res://Scene/Prefabs/construction_pile.tscn"
 BuildTime = 10.0
 BuildCost = 1.0
 DefaultDepth = 0.05
 DefaultHeight = 0.01
-CanDoAbilities = 2
+CanDoAbilities = 0

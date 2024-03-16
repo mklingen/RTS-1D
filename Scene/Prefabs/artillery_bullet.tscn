@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://gbve4domxvux"]
+
+[ext_resource type="Script" path="res://Script/Bullet.cs" id="1_ek3hw"]
+[ext_resource type="PackedScene" uid="uid://wv7gdssmxnrl" path="res://Scene/Prefabs/small_explosion.tscn" id="2_63rc1"]
+
+[sub_resource type="Curve" id="Curve_bievm"]
+_data = [Vector2(0, 0), 0.0, 5.12306, 0, 0, Vector2(0.5, 1), -9.21507e-07, -9.21507e-07, 0, 0, Vector2(1, 0), -3.14, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_fiw08"]
+_data = [Vector2(0, 0), 0.0, 1.08308, 0, 0, Vector2(1, 1), 1.03158, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xvuuq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r0hgl"]
+albedo_color = Color(1, 1, 0.109804, 1)
+emission_enabled = true
+emission = Color(1, 0.811765, 0.243137, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2cxtg"]
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_uxj3a"]
+material = SubResource("StandardMaterial3D_2cxtg")
+size = Vector2(0.005, 0.005)
+
+[sub_resource type="Curve" id="Curve_kd8ko"]
+_data = [Vector2(0, 0.989474), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="ArtilleryBullet" type="Node3D"]
+script = ExtResource("1_ek3hw")
+MaxLifeTime = 10.0
+BulletSpeed = 0.25
+Radius = 0.05
+ExplosionPrefab = ExtResource("2_63rc1")
+heightCurve = SubResource("Curve_bievm")
+distCurve = SubResource("Curve_fiw08")
+arcAmount = 2.5
+
+[node name="BulletMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.01, 0, 0, 0, -4.37114e-10, -0.01, 0, 0.01, -4.37114e-10, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_xvuuq")
+surface_material_override/0 = SubResource("StandardMaterial3D_r0hgl")
+
+[node name="Particles" type="CPUParticles3D" parent="."]
+cast_shadow = 0
+amount = 15
+mesh = SubResource("QuadMesh_uxj3a")
+emission_shape = 1
+emission_sphere_radius = 0.01
+particle_flag_align_y = true
+direction = Vector3(0, 0, 1)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.05
+initial_velocity_max = 0.1
+damping_min = 0.5
+damping_max = 2.0
+scale_amount_curve = SubResource("Curve_kd8ko")
+color = Color(1, 0.882353, 0, 1)

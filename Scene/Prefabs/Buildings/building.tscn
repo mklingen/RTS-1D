@@ -1,16 +1,31 @@
-[gd_scene load_steps=17 format=3 uid="uid://crugiqpv1b15t"]
+[gd_scene load_steps=13 format=3 uid="uid://crugiqpv1b15t"]
 
 [ext_resource type="Script" path="res://Script/Unit.cs" id="1_5sj78"]
-[ext_resource type="Resource" uid="uid://dfkemlndu2q2m" path="res://Units/building_1.tres" id="2_8anfg"]
+[ext_resource type="Script" path="res://Script/UnitStats.cs" id="2_b5kpi"]
 [ext_resource type="Script" path="res://Script/Selectable.cs" id="3_uxd35"]
 [ext_resource type="Script" path="res://Script/SelectionBar.cs" id="4_vb875"]
 [ext_resource type="Script" path="res://Script/HealthBar.cs" id="5_v4hyn"]
-[ext_resource type="Script" path="res://Script/ConstructionBay.cs" id="6_5588d"]
-[ext_resource type="Resource" uid="uid://cjt5f3xp1amgm" path="res://Units/tank.tres" id="7_2reu2"]
-[ext_resource type="Resource" uid="uid://cx1o8xhd6s2eo" path="res://Units/engineer.tres" id="8_rwyxw"]
-[ext_resource type="Script" path="res://Script/ResourceDropOff.cs" id="9_fh1c3"]
-[ext_resource type="Resource" uid="uid://bp47lfw8nqp5q" path="res://Units/scout.tres" id="9_owtk4"]
-[ext_resource type="PackedScene" uid="uid://d13w3q347slhq" path="res://Art/Mesh/command_center.tscn" id="10_5iapf"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uecsj"]
+radius = 0.25
+
+[sub_resource type="Resource" id="Resource_1km8c"]
+script = ExtResource("2_b5kpi")
+Name = "Command Center"
+MaxSpeed = 0.0
+MaxHealth = 200.0
+Armor = 1.0
+SensingShape = SubResource("SphereShape3D_uecsj")
+SensingCollisionMask = 1
+IsABuilding = true
+PrefabFile = "res://Scene/Prefabs/Buildings/command_center.tscn"
+BuildCursorPrefabFile = "res://Art/Mesh/command_center.tscn"
+ConstructionPilePrefab = "res://Scene/Prefabs/construction_pile.tscn"
+BuildTime = 10.0
+BuildCost = 1.0
+DefaultDepth = 0.05
+DefaultHeight = 0.01
+CanDoAbilities = 2
 
 [sub_resource type="Gradient" id="Gradient_cgk4m"]
 offsets = PackedFloat32Array(0, 0.995776)
@@ -36,11 +51,11 @@ repeat = 2
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_weftb"]
 height = 0.0980629
-radius = 0.0501912
+radius = 0.0662986
 
 [node name="Building1" type="Node3D"]
 script = ExtResource("1_5sj78")
-Stats = ExtResource("2_8anfg")
+Stats = SubResource("Resource_1km8c")
 OrientMode = 1
 
 [node name="Selection" type="Node3D" parent="."]
@@ -72,18 +87,5 @@ lowHealthThreshold = 0.5
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0498688, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0498688, -0.0704114)
 shape = SubResource("CylinderShape3D_weftb")
-
-[node name="BuildBay" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.46302e-09, 0.0155791, 0.0137746)
-script = ExtResource("6_5588d")
-availableUnits = [ExtResource("7_2reu2"), ExtResource("8_rwyxw"), ExtResource("9_owtk4")]
-BuildMenuName = "Command Center"
-
-[node name="ResourceDropOff" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0913248, 0.0160794, -0.0144713)
-script = ExtResource("9_fh1c3")
-
-[node name="command_center" parent="." instance=ExtResource("10_5iapf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0125493, -0.0709168)
