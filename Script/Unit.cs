@@ -96,7 +96,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     private PhysicsShapeQueryParameters3D queryParameters;
 
     private Unit nearestEnemy;
-
+    private Unit enemyIsAttackingMe;
     private HealthBar healthBar;
 
     public interface ISetTeam
@@ -114,6 +114,10 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         return Game.Get().GetTeam(Team);
     }
 
+    public void NotifyUnderAttack(Unit enemy)
+    {
+        enemyIsAttackingMe = enemy;
+    }
 
     public override void _Ready()
     {
@@ -182,7 +186,15 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
 
     protected TaskLib.Task GetIdleTask()
     {
-        if (collectors.Count > 0 && currentTask == null) {
+        if (enemyIsAttackingMe != null && 
+            enemyIsAttackingMe.NativeInstance.ToInt64() != 0x0 &&
+            weapons.Count > 0 &&
+            nearestEnemy == null) {
+            GoTo(enemyIsAttackingMe.GlobalPosition);
+            nearestEnemy = enemyIsAttackingMe;
+            enemyIsAttackingMe = null;
+        }
+        else if (collectors.Count > 0 && currentTask == null) {
             var field = Game.FindChildrenRecursive<ResourceField>(Game.Get()).FirstOrDefault();
             Game.Team team = this.GetTeamObject();
             if (field != null && team != null) {
@@ -220,6 +232,10 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     protected void OnIdle(double delta)
     {
         GlobalVelocity *= 0.5f;
+        foreach (var weapon in weapons) {
+            weapon.ClearPointTarget();
+        }
+
     }
 
     protected void OnMovingToTarget(double delta)
@@ -231,8 +247,12 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
 
         Vector3 targetVelocity = (currentTarget - GlobalPosition) * Stats.MaxSpeed;
         Vector3 tangentVelocity = planet.ProjectToCylinder(GlobalPosition + targetVelocity.Normalized(), Height, Depth) - GlobalPosition;
-        targetVelocity = (tangentVelocity.Normalized() * targetVelocity.Length()).LimitLength(Stats.MaxSpeed);
-        GlobalVelocity = GlobalVelocity * 0.1f + 0.9f * targetVelocity;
+        targetVelocity = (tangentVelocity.Normalized() * targetVelocity.Length()).LimitLength(1) * Stats.MaxSpeed;
+        GlobalVelocity = targetVelocity;
+
+        foreach (var weapon in weapons) {
+            weapon.PointToward(currentTarget);
+        }
     }
 
     protected void MaybeShootAtTargets()
@@ -240,7 +260,9 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         if (nearestEnemy == null) {
             return;
         }
-        ShootAt(nearestEnemy.GlobalPosition, nearestEnemy);
+        if (ShootAt(nearestEnemy.GlobalPosition, nearestEnemy)) {
+            nearestEnemy.NotifyUnderAttack(this);
+        }
     }
 
     protected void HandleTargetSelection(int maxTargets)
@@ -275,6 +297,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
             float distSquared = (unit.GlobalPosition - GlobalPosition).LengthSquared();
             if (distSquared < closestDistSquared) {
                 closestTarget = unit;
+                closestDistSquared = distSquared;
             }
         }
         // Now select the nearest enemy.
@@ -286,11 +309,13 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     }
 
     // Attempts to shoot at the target with all weapons.
-    void ShootAt(Vector3 target, Node3D targetNode = null)
+    bool ShootAt(Vector3 target, Node3D targetNode = null)
     {
+        bool shot = false;
         foreach (var weapon in weapons) {
-            weapon.MaybeShoot(target, targetNode);
+            shot = shot || weapon.MaybeShoot(target, targetNode);
         }
+        return shot;
     }
 
     public void DoDamage(float damage, float armorPiercing)

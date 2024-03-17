@@ -75,6 +75,7 @@ lowHealthThreshold = 0.5
 transform = Transform3D(1, 1.09721e-08, 5.82077e-09, 5.47152e-09, 1, 0, 4.88944e-09, 2.98023e-08, 1, 0, 0.01, 0)
 script = ExtResource("7_ltxu5")
 Stats = ExtResource("8_awam1")
+muzzleOffset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.025)
 
 [node name="tank_turret_1" parent="OffsetRoot/Weapon" instance=ExtResource("9_at1bo")]
 transform = Transform3D(-1, -1.73472e-16, -8.74228e-08, 2.62856e-24, 1, 8.27181e-23, 8.74228e-08, 0, -1, 1.38778e-17, -0.0199934, 0)

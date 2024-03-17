@@ -25,7 +25,7 @@ BulletSpeed = 0.5
 ExplosionPrefab = ExtResource("2_n3kud")
 heightCurve = SubResource("Curve_bievm")
 distCurve = SubResource("Curve_fiw08")
-arcAmount = 1.57
+arcAmount = 0.5
 
 [node name="BulletMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.003, 0, 0, 0, -3.93402e-10, -0.003, 0, 0.009, -1.31134e-10, 0, 0, 0)

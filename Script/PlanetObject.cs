@@ -34,7 +34,10 @@ public partial class PlanetObject : Node3D
     [ExportCategory("Orientation")]
     [Export]
     public OrientationMode OrientMode;
+    [Export]
+    private float velocitySmoothing = 0.75f;
 
+    private Vector3 smoothedVelocity;
 
     [ExportCategory("Randomization")]
     [Export]
@@ -45,6 +48,7 @@ public partial class PlanetObject : Node3D
     private float startDepthRandomOffset = 0.00f;
 
     private List<ISetRandomOffset> offsetSetters = new List<ISetRandomOffset>();
+
 
     private Planet GetPlanet()
     {
@@ -76,8 +80,11 @@ public partial class PlanetObject : Node3D
         Vector3 nextPosition = GetPlanet().ProjectToCylinder(globalPosition + GlobalVelocity * (float)delta, Height, Depth);
         switch (OrientMode) {
             case OrientationMode.Velocity: {
-                    if (GlobalVelocity.LengthSquared() > 1e-6) {
-                        LookAt(nextPosition, planet.GetTangentFrame(GlobalPosition).Up);
+                    smoothedVelocity = smoothedVelocity * velocitySmoothing + (1.0f - velocitySmoothing) * GlobalVelocity;
+                    Vector3 smoothedNextPosition = GetPlanet().ProjectToCylinder(globalPosition + smoothedVelocity * (float)delta, Height, Depth);
+                    if (smoothedVelocity.LengthSquared() > 1e-6) {
+                        Transform3D lookedAt = GlobalTransform.LookingAt(smoothedNextPosition, planet.GetTangentFrame(GlobalPosition).Up);
+                        GlobalTransform = lookedAt.InterpolateWith(GlobalTransform, velocitySmoothing);
                     }
                     break;
             }

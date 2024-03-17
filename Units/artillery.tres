@@ -8,7 +8,7 @@ radius = 2.0
 [resource]
 script = ExtResource("1_wdugl")
 Name = "Artillery"
-MaxSpeed = 0.08
+MaxSpeed = 0.25
 MaxHealth = 15.0
 Armor = 0.0
 SensingShape = SubResource("SphereShape3D_w28ha")

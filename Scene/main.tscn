@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dbfq55rp55g0j"]
+[gd_scene load_steps=31 format=3 uid="uid://dbfq55rp55g0j"]
 
 [ext_resource type="Script" path="res://Script/Game.cs" id="1_ddooy"]
 [ext_resource type="Script" path="res://Script/Planet.cs" id="2_r1u44"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://Script/ResourceField.cs" id="9_mesx2"]
 [ext_resource type="PackedScene" uid="uid://xcxqfbo6x0ba" path="res://Scene/Prefabs/structure_blueprint.tscn" id="12_dgdke"]
 [ext_resource type="PackedScene" uid="uid://cnnywlvcqvuws" path="res://Scene/Prefabs/Buildings/command_center.tscn" id="13_tj5hb"]
+[ext_resource type="PackedScene" uid="uid://cy2efvoids55d" path="res://Scene/Prefabs/Units/artillery.tscn" id="14_o754k"]
 [ext_resource type="PackedScene" uid="uid://don28ndw5diak" path="res://Scene/Prefabs/Units/tank.tscn" id="14_p0qyn"]
 [ext_resource type="PackedScene" uid="uid://33ed4jkduxig" path="res://Scene/Prefabs/Units/engineer.tscn" id="14_v837e"]
 
@@ -223,6 +224,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0752536, 2.0072, 0)
 [node name="Building1" parent="." instance=ExtResource("13_tj5hb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.99691, -0.0966987)
 AddBuildingOnReady = true
+
+[node name="Artillery" parent="." instance=ExtResource("14_o754k")]
+transform = Transform3D(-0.120639, 0.0970943, -0.987937, 0, 0.995205, 0.0978087, 0.992696, 0.0117996, -0.120061, 0.18146, 2.00589, -0.00313643)
 
 [editable path="Unit1"]
 [editable path="Unit2"]

@@ -150,6 +150,7 @@ public partial class MoveSelectTool : Node, ITool
         }
         wasPreviouslyPressingPrimaryClick = isPressingPrimaryClick;
         var selectableArray = new Godot.Collections.Array<Selectable>();
+        selectionBuffer.RemoveAll(selected => selected.NativeInstance.ToInt64() == 0x0);
         selectableArray.AddRange(selectionBuffer);
         EmitSignal(SignalName.SelectionChanged, selectableArray);
     }
