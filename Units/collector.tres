@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="UnitStats" load_steps=3 format=3 uid="uid://c5ategvaqwiwn"]
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://c5ategvaqwiwn"]
 
+[ext_resource type="Curve" uid="uid://db33qmes63qo3" path="res://Units/standard_acceleration.tres" id="1_puggy"]
 [ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_xu0p0"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uecsj"]
@@ -8,7 +9,8 @@ radius = 0.25
 [resource]
 script = ExtResource("1_xu0p0")
 Name = "Resource Collector"
-MaxSpeed = 0.5
+MaxSpeed = 0.2
+MovementCurve = ExtResource("1_puggy")
 MaxHealth = 25.0
 Armor = 0.0
 SensingShape = SubResource("SphereShape3D_uecsj")

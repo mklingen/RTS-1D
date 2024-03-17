@@ -81,7 +81,7 @@ public partial class Weapon : Node3D
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (currentGlobalTarget != null) {
+        if (currentGlobalTarget != null && (currentGlobalTarget.Value - GlobalPosition).LengthSquared() > 0.005f) {
             var parentNode = GetParentNode3D();
             Vector3 projectedLocalTarget = ToLocal(currentGlobalTarget.Value);
             Vector3 projUp = localRotationAxis.Dot(projectedLocalTarget) * localRotationAxis;

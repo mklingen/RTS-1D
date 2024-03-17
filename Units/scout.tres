@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="UnitStats" load_steps=3 format=3 uid="uid://bp47lfw8nqp5q"]
+[gd_resource type="Resource" script_class="UnitStats" load_steps=4 format=3 uid="uid://bp47lfw8nqp5q"]
 
+[ext_resource type="Curve" uid="uid://db33qmes63qo3" path="res://Units/standard_acceleration.tres" id="1_uc42v"]
 [ext_resource type="Script" path="res://Script/UnitStats.cs" id="1_xk368"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3ay16"]
@@ -7,7 +8,8 @@
 [resource]
 script = ExtResource("1_xk368")
 Name = "Scout"
-MaxSpeed = 2.0
+MaxSpeed = 1.0
+MovementCurve = ExtResource("1_uc42v")
 MaxHealth = 25.0
 Armor = 0.0
 SensingShape = SubResource("SphereShape3D_3ay16")

@@ -12,6 +12,10 @@ public partial class UnitStats : Resource
     [Export]
     public float MaxSpeed = 1.0f;
 
+    // Curve along which the unit moves.
+    [Export]
+    public Curve MovementCurve;
+
     [ExportGroup("Health")]
     [Export]
     public float MaxHealth = 100.0f;

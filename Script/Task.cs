@@ -54,7 +54,7 @@ namespace TaskLib
 
         public override bool IsDone()
         {
-            bool isDone = Unit.IsNearGoToTarget(threshold);
+            bool isDone = Unit.IsNearGoToTarget(target, threshold);
             return isDone;
         }
 
@@ -347,7 +347,7 @@ namespace TaskLib
     {
         public DropOffTask(Unit unit, Collector collector, ResourceDropOff dropOff) :
             base(new List<Task> { 
-                new GoToTask(unit, dropOff.GlobalPosition, 0.01f) 
+                new GoToTask(unit, dropOff.GlobalPosition, 0.08f) 
               , new ActionTask(() => { collector.DropOff(dropOff); return true; })})
 
         {
@@ -403,7 +403,7 @@ namespace TaskLib
         public BuildTask(Unit unit, Builder builder, ConstructionPile blueprint) :
             base (new List<Task>
             {
-                new GoToTask(unit, blueprint.GlobalPosition, 0.01f),
+                new GoToTask(unit, blueprint.GlobalPosition, 0.08f),
                 new WaitWhileBuildingTask(unit, builder)
             })
         {

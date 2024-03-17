@@ -16,8 +16,8 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     [Export] private bool AddBuildingOnReady = false;
 
     [Export]
-    protected float targetDistanceThreshold = 0.005f;
-    protected Vector3 currentTarget;
+    protected float targetDistanceThreshold = 0.08f;
+    //protected Vector3 currentTarget;
 
     private TaskLib.Task currentTask;
 
@@ -27,9 +27,9 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         currentTask.Start();
     }
 
-    public bool IsNearGoToTarget(float threshold)
+    public bool IsNearGoToTarget(Vector3 goToTarget, float threshold)
     {
-        return (GlobalPosition - currentTarget).Length() < threshold;
+        return (GlobalPosition - goToTarget).Length() < threshold;
     }
 
     public enum State
@@ -37,6 +37,34 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         Idle,
         MovingToTarget
     }
+
+    private struct MoveToTargetState
+    {
+        public Vector3 Target;
+        public Vector3 Start;
+        public float StartTime;
+        public float EndTime;
+
+        public float GetAlpha(float t)
+        {
+            return Mathf.Clamp((t - StartTime) / (EndTime - StartTime), 0.0f, 1.0f);
+        }
+
+        public Vector3 GetCurrentTarget(float t, Curve curve)
+        {
+            return (Target - Start) * curve.Sample(GetAlpha(t)) + Start;
+        }
+
+        public void StartMoving(Vector3 from, Vector3 to, float now, float timeToTravel)
+        {
+            Start = from;
+            Target = to;
+            StartTime = now;
+            EndTime = now + timeToTravel;
+        }
+    }
+
+    private MoveToTargetState moveToTargetState;
 
     [Export]
     private State state;
@@ -202,7 +230,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
                 if (dropOff != null) {
                     Vector3? motePosition = field.GetClosestMotePosition(GlobalPosition);
                     if (motePosition != null) {
-                        DoTask(new TaskLib.SequenceTask(new List<TaskLib.Task> { new TaskLib.GoToTask(this, motePosition.Value, 0.01f), new TaskLib.HarvestTask(this, field), new TaskLib.DropOffTask(this, collectors[0], dropOff) }));
+                        DoTask(new TaskLib.SequenceTask(new List<TaskLib.Task> { new TaskLib.GoToTask(this, planet.ProjectToCylinder(motePosition.Value, Height, Depth), 0.08f), new TaskLib.HarvestTask(this, field), new TaskLib.DropOffTask(this, collectors[0], dropOff) }));
                         return currentTask;
                     }
                 }
@@ -225,8 +253,10 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         if (!Stats.CanMove()) {
             return;
         }
-        currentTarget = planet.ProjectToCylinder(pos, Height, Depth);
-        TransitionState(State.MovingToTarget);
+        if ((moveToTargetState.Target - pos).LengthSquared() > 1e-2 || state != State.MovingToTarget) {
+            moveToTargetState.StartMoving(GlobalPosition, pos, Game.GetTime(), (GlobalPosition - pos).Length() / Stats.MaxSpeed);
+            TransitionState(State.MovingToTarget);
+        }
     }
 
     protected void OnIdle(double delta)
@@ -240,18 +270,17 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
 
     protected void OnMovingToTarget(double delta)
     {
-        if ((currentTarget - GlobalPosition).Length() < targetDistanceThreshold) {
+        Vector3 currentTarget = planet.ProjectToCylinder(moveToTargetState.GetCurrentTarget(Game.GetTime(), Stats.MovementCurve), Height, Depth);
+        if (moveToTargetState.GetAlpha(Game.GetTime()) >= 1.0f) {
             TransitionState(State.Idle);
             return;
         }
-
-        Vector3 targetVelocity = (currentTarget - GlobalPosition) * Stats.MaxSpeed;
-        Vector3 tangentVelocity = planet.ProjectToCylinder(GlobalPosition + targetVelocity.Normalized(), Height, Depth) - GlobalPosition;
-        targetVelocity = (tangentVelocity.Normalized() * targetVelocity.Length()).LimitLength(1) * Stats.MaxSpeed;
+        Vector3 nextTarget = planet.ProjectToCylinder(moveToTargetState.GetCurrentTarget((float)(Game.GetTime() + delta), Stats.MovementCurve), Height, Depth);
+        Vector3 targetVelocity = (nextTarget - currentTarget) / (float)delta;
         GlobalVelocity = targetVelocity;
 
         foreach (var weapon in weapons) {
-            weapon.PointToward(currentTarget);
+            weapon.PointToward(nextTarget + targetVelocity * 2);
         }
     }
 
