@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-public partial class ResourceField : PlanetObject
+public partial class ResourceField : Node3D
 {
     [ExportGroup("Resource Field")]
     [Export]
@@ -34,6 +34,17 @@ public partial class ResourceField : PlanetObject
     private int livingMotesCount = 0;
     private bool[] motesAlive;
     private Vector3[] motesGlobalPositions;
+
+    private Planet planet;
+
+    private Planet GetPlanet()
+    {
+        if (planet != null) {
+            return planet;
+        }
+        planet = Game.Get().GetPlanet();
+        return planet;
+    }
 
     public Vector3 RandomInsideUnitSphere()
     {
@@ -106,10 +117,14 @@ public partial class ResourceField : PlanetObject
         motesAlive = new bool[maxNumMotes];
         livingMotesCount = maxNumMotes;
         motesGlobalPositions = new Vector3[maxNumMotes];
+        GlobalPosition = GetPlanet().ProjectToSurface(GlobalPosition);
+        LookAt(GlobalPosition + GetPlanet().GetTangentFrame(GlobalPosition).Up);
         for (int i = 0; i < maxNumMotes; i++) {
             CreateRandomMote(i);
         }
         resourcesRemaining = MaxResources;
+
+        GetPlanet()?.AddResource(this, GlobalPosition);
     }
 
     public float TryRemoveResourcesNear(Vector3 pos, float amount)
@@ -143,6 +158,10 @@ public partial class ResourceField : PlanetObject
         motesAlive[idx] = false;
         multiMesh.Multimesh.SetInstanceTransform(idx, new Transform3D());
         livingMotesCount--;
+
+        if (livingMotesCount == 0) {
+            GetPlanet()?.RemoveResource(this);
+        }
     }
 
     private void CreateRandomMote(int idx)
@@ -150,14 +169,14 @@ public partial class ResourceField : PlanetObject
         Vector3 offset = RandomInsideUnitSphere() * projectionRadius;
         Vector3 globalPos = ToGlobal(offset);
         motesAlive[idx] = true;
-        Vector3 projected = planet.ProjectToSurface(globalPos, 0.0f);
+        Vector3 projected = GetPlanet().ProjectToSurface(globalPos, 0.0f);
         motesGlobalPositions[idx] = projected;
         Planet.TangentFrame tangent = planet.GetTangentFrame(projected);
         float randomScale = (float)GD.RandRange(minMoteScale, maxMoteScale);
         float randomRotation = (float)GD.RandRange(-Mathf.Pi, Math.PI);
         Basis randomBasis = tangent.ToBasis(randomScale).Rotated(tangent.Up, randomRotation);
-        Transform3D globalMoteTransform = new Transform3D(randomBasis, projected);
-        multiMesh.Multimesh.SetInstanceTransform(idx, Transform.Inverse() * globalMoteTransform);
+        Transform3D localTransform = new Transform3D(randomBasis, multiMesh.ToLocal(projected));
+        multiMesh.Multimesh.SetInstanceTransform(idx, localTransform);
     }
 
 }

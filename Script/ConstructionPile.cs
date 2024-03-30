@@ -9,6 +9,11 @@ public partial class ConstructionPile : PlanetObject
     public float ConstructionProgress;
 
 
+    public void OnCreate()
+    {
+        Game.Get().GetTeam(Team).ConstructionPiles.Add(this);
+    }
+
     public bool IsDone()
     {
         return ConstructionProgress > Unit.BuildTime;
@@ -28,20 +33,20 @@ public partial class ConstructionPile : PlanetObject
             created.Depth = Unit.DefaultDepth;
             created.Height = Unit.DefaultHeight;
             created.Team = Team;
-            created.MaybeAddBuilding();
+            created.AddToGrid();
             Game.Get().GetTeam(Team).Resources -= Unit.BuildCost;
-            GD.Print("Created unit.");
-            QueueFree();
+            GD.Print("Created building.");
+            Destroy();
         }
         else {
             GD.PrintErr("Unit was null.");
         }
-
         return created;
     }
 
     public void Destroy()
     {
+        Game.Get().GetTeam(Team).ConstructionPiles.Remove(this);
         QueueFree();
     }
 

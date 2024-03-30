@@ -71,7 +71,7 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
 
     private int _team;
     [Export]
-    public int Team { get { return _team;  } set { _team = value; ApplyTeamColor(); } }
+    public int Team { get { return _team;  } set { _team = value; this.QueueAction(OnSetTeam); } }
 
     // List of weapons attached to this unit.
     private List<Weapon> weapons;
@@ -81,11 +81,29 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     private List<ResourceDropOff> dropOffs;
     // List of structure builders attached to this unit.
     private List<Builder> builders;
+
+    private int gridIndex = -1;
+
     public List<Collector> GetCollectors()
     {
         return collectors;
     }
 
+    private List<Action> frameActions = new List<Action>();
+
+    private void QueueAction(Action action)
+    {
+        frameActions.Add(action);
+    }
+
+    private void OnSetTeam()
+    {
+        GetTeamObject().AddUnit(this);
+        foreach (var child in Game.FindInterfacesRecursive<ISetTeam>(this)) {
+            child.SetTeam(Team);
+        }
+        ApplyTeamColor();
+    }
 
     public void ApplyTeamColor()
     {
@@ -164,19 +182,20 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         queryParameters.CollisionMask = Stats.SensingCollisionMask;
         queryParameters.CollideWithBodies = true;
         healthBar = Game.FindChildrenRecursive<HealthBar>(this).FirstOrDefault();
-        foreach (var setTeam in Game.FindInterfacesRecursive<ISetTeam>(this)) {
-            setTeam.SetTeam(Team);
-        }
-        Game.Get().AddUnit(this);
+     
         if (AddBuildingOnReady) {
-            MaybeAddBuilding();
+            AddToGrid();
         }
-        ApplyTeamColor();
+
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
+        foreach (var action in frameActions) {
+            action.Invoke();
+        }
+        frameActions.Clear();
         if (currentTask != null) {
             if (currentTask.IsDone()) {
                 currentTask.End();
@@ -199,6 +218,10 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
         }
         HandleTargetSelection(32);
         MaybeShootAtTargets();
+
+        if (!Stats.IsABuilding && GlobalVelocity.LengthSquared() > 1e-3 || gridIndex == -1) {
+            MaybeMoveGridIndex();
+        }
     }
 
     protected void TransitionState(State nextState)
@@ -223,7 +246,10 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
             enemyIsAttackingMe = null;
         }
         else if (collectors.Count > 0 && currentTask == null) {
-            var field = Game.FindChildrenRecursive<ResourceField>(Game.Get()).FirstOrDefault();
+            var field = Game.FindChildrenRecursive<ResourceField>(Game.Get()).
+                Where(field => field.GetResourcesRemaining() > 0)
+                .OrderBy(field => field.GlobalPosition.DistanceSquaredTo(GlobalPosition))
+                .FirstOrDefault();
             Game.Team team = this.GetTeamObject();
             if (field != null && team != null) {
                 ResourceDropOff dropOff = team.GetDropOffs().FirstOrDefault();
@@ -362,16 +388,36 @@ public partial class Unit : PlanetObject, Game.ITeamObject, Game.IDamageable
     public void Die()
     {
         if (Stats.IsABuilding) {
-            planet.RemoveBuilding(GlobalPosition);
+            planet.RemoveBuilding(this);
+        } else {
+            planet.RemoveUnit(this);
         }
         EmitSignal(SignalName.OnDeath, this);
         QueueFree();
     }
 
-    public void MaybeAddBuilding()
+    public void AddToGrid()
     {
         if (Stats.IsABuilding) {
             Game.Get().GetPlanet().AddBuilding(this, GlobalPosition);
+        } else {
+            Game.Get().GetPlanet().AddUnit(this, GlobalPosition, 1);
         }
     }
+
+    public void MaybeMoveGridIndex()
+    {
+        int lastIdx = gridIndex;
+        gridIndex = Game.Get().GetPlanet().GetGridIndexAt(GlobalPosition);
+
+        if (Stats.IsABuilding) {
+            return;
+        }
+
+        if (gridIndex != lastIdx) {
+            Game.Get().GetPlanet().RemoveUnit(this);
+            Game.Get().GetPlanet().AddUnit(this, GlobalPosition, 1);
+        }
+    }
+
 }

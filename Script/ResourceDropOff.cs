@@ -52,6 +52,7 @@ public partial class ResourceDropOff : Node3D, Unit.ISetTeam, Game.ITeamObject
         collector.ForceSetPosition(GlobalPosition, true);
         collector.GoTo(GlobalPosition + Game.RandomVector3(0.1f));
         collector.Team = team;
+        collector.ApplyTeamColor();
         collectors.Add(collector);
         everBuilt = true;
     }

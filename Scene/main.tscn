@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dbfq55rp55g0j"]
+[gd_scene load_steps=32 format=3 uid="uid://dbfq55rp55g0j"]
 
 [ext_resource type="Script" path="res://Script/Game.cs" id="1_ddooy"]
 [ext_resource type="Script" path="res://Script/Planet.cs" id="2_r1u44"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cy2efvoids55d" path="res://Scene/Prefabs/Units/artillery.tscn" id="14_o754k"]
 [ext_resource type="PackedScene" uid="uid://don28ndw5diak" path="res://Scene/Prefabs/Units/tank.tscn" id="14_p0qyn"]
 [ext_resource type="PackedScene" uid="uid://33ed4jkduxig" path="res://Scene/Prefabs/Units/engineer.tscn" id="14_v837e"]
+[ext_resource type="Script" path="res://Script/AIManager.cs" id="15_i31re"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_bfbjo"]
 top_radius = 2.0
@@ -123,7 +124,7 @@ script = ExtResource("1_ddooy")
 [node name="Planet" type="Node3D" parent="."]
 script = ExtResource("2_r1u44")
 Radius = 2.0
-buildingPlacementResolutionDegrees = 1.0
+gridResolutionDegrees = 1.0
 
 [node name="PlanetMesh" type="MeshInstance3D" parent="Planet"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
@@ -178,7 +179,7 @@ script = ExtResource("6_tvrdh")
 environment = SubResource("Environment_cey1v")
 
 [node name="ResourceField" type="Node3D" parent="."]
-transform = Transform3D(0.999186, -0.00503087, -0.0400196, -0.000365505, 0.991017, -0.133727, 0.0403333, 0.133633, 0.99021, -0.537504, 1.87606, -0.0660273)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -0.518093, 1.93578, -0.0535107)
 script = ExtResource("9_mesx2")
 MaxResources = 500.0
 resourceMoteMesh = SubResource("BoxMesh_oa7x1")
@@ -189,10 +190,17 @@ maxMoteScale = 1.0
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="ResourceField"]
 multimesh = SubResource("MultiMesh_a0w41")
 
-[node name="Base2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.993918, 0.031974, 0.10538, -0.0254809, 0.997726, -0.0623964, -0.107136, 0.0593317, 0.992473, -0.0137067, -2.01956, -0.136625)
-mesh = SubResource("BoxMesh_sl2en")
-skeleton = NodePath("")
+[node name="ResourceField2" type="Node3D" parent="."]
+transform = Transform3D(0.999186, -0.000847543, -0.0403258, -0.000365505, 0.999546, -0.0300852, 0.0403333, 0.0300758, 0.998734, -0.536535, -1.96524, -0.124919)
+script = ExtResource("9_mesx2")
+MaxResources = 500.0
+resourceMoteMesh = SubResource("BoxMesh_oa7x1")
+maxNumMotes = 16
+minMoteScale = 0.5
+maxMoteScale = 1.0
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="ResourceField2"]
+multimesh = SubResource("MultiMesh_a0w41")
 
 [node name="Base3" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.240672, -0.0608281, 0.0296165, 0.0562349, 0.240706, 0.0373949, -0.0376141, -0.0293376, 0.245407, 0.578206, -1.9234, 0.32169)
@@ -211,7 +219,7 @@ skeleton = NodePath("")
 [node name="StructureBlueprint" parent="." instance=ExtResource("12_dgdke")]
 
 [node name="Unit1" parent="." instance=ExtResource("14_p0qyn")]
-transform = Transform3D(-0.999991, -0.00432839, 0, 0.00432839, -0.999991, 0, 0, 0, 1, -0.0220949, -1.98162, 0.0406136)
+transform = Transform3D(-0.999991, -0.00432839, 0, 0.00432839, -0.999991, 0, 0, 0, 1, -0.022237, -2.01444, 0.0406136)
 Team = 1
 
 [node name="Unit2" parent="." instance=ExtResource("14_p0qyn")]
@@ -221,12 +229,24 @@ Team = 1
 [node name="Engineer" parent="." instance=ExtResource("14_v837e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0752536, 2.0072, 0)
 
+[node name="Engineer2" parent="." instance=ExtResource("14_v837e")]
+transform = Transform3D(0.987705, 8.74228e-08, 0.156331, 8.63479e-08, -1, 1.36669e-08, 0.156331, 0, -0.987705, 0.0752536, -2.01766, 0)
+Team = 1
+
 [node name="Building1" parent="." instance=ExtResource("13_tj5hb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.99691, -0.0966987)
 AddBuildingOnReady = true
 
+[node name="Building2" parent="." instance=ExtResource("13_tj5hb")]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -1.26063e-08, -1.99994, -0.0966987)
+AddBuildingOnReady = true
+Team = 1
+
 [node name="Artillery" parent="." instance=ExtResource("14_o754k")]
 transform = Transform3D(-0.120639, 0.0970943, -0.987937, 0, 0.995205, 0.0978087, 0.992696, 0.0117996, -0.120061, 0.18146, 2.00589, -0.00313643)
+
+[node name="AIManager" type="Node" parent="."]
+script = ExtResource("15_i31re")
 
 [editable path="Unit1"]
 [editable path="Unit2"]

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 [GlobalClass]
 public partial class UnitStats : Resource
@@ -68,6 +69,7 @@ public partial class UnitStats : Resource
     [Export]
     public Abilities CanDoAbilities;
 
+
     public bool CanMove()
     {
         return MaxSpeed > 0;
@@ -104,6 +106,7 @@ public partial class UnitStats : Resource
         node.Unit = this;
         node.Team = team;
         parent.AddChild(node);
+        node.OnCreate();
         return node;
     }
 }

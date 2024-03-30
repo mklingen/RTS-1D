@@ -41,6 +41,11 @@ public partial class Game : Node3D
         public event OnResourcesChangedEvent OnResourcesChanged;
 
         /// <summary>
+        /// Whether this team is the player team.
+        /// </summary>
+        public bool IsPlayer = false;
+
+        /// <summary>
         /// Index of the team.
         /// </summary>
         public int Index;
@@ -66,6 +71,11 @@ public partial class Game : Node3D
         /// List of units belonging to the team.
         /// </summary>
         public List<Unit> Units = new List<Unit>();
+
+        /// <summary>
+        /// List of construction piles belonging to the team.
+        /// </summary>
+        public List<ConstructionPile> ConstructionPiles = new List<ConstructionPile>();
 
         /// <summary>
         /// Adds a unit to the team's list of units.
@@ -95,6 +105,38 @@ public partial class Game : Node3D
 
         public Color Color;
         public StandardMaterial3D TeamColorMaterial;
+
+        // Gets the mean global position of all buildings that exist.
+        public Vector3 GetBuildingAverageMeanPos()
+        {
+            Vector3 toReturn = Vector3.Zero;
+            int count = 0;
+            foreach (var unit in Units) {
+                if (unit.Stats.IsABuilding) {
+                    toReturn += unit.GlobalPosition;
+                    count++;
+                }
+            }
+            if (count > 0) {
+                return toReturn / count;
+            }
+            return toReturn;
+        }
+
+        // Gets the nearest location to the given origin where it is possible to build a building.
+        public Vector3? GetNearestFreeBuildLocation(Planet planet, Vector3 origin)
+        {
+            int idx = planet.GetGridIndexAt(origin);
+            for (int dx = 0; dx < planet.PlanetGrid.Length() * 2; dx++) {
+                int multiplier = (dx/2) % 2 == 0 ? 1 : -1;
+                int k = idx + multiplier * dx;
+                Vector3 query = planet.ToGlobal(planet.PlanetGrid.PositionOf(planet.Radius, k));
+                if (planet.CanBuildBuilding(query)) {
+                    return query;
+                }
+            }
+            return null;
+        }
     }
 
     /// <summary>
@@ -114,11 +156,16 @@ public partial class Game : Node3D
     public Team GetTeam(int idx)
     {
         if (!Teams.ContainsKey(idx)) {
-            Teams[idx] = new Team() { Index = idx, Resources = 100.0f, Units = new List<Unit>(), 
+            Teams[idx] = new Team() { IsPlayer = idx == 0, Index = idx, Resources = 100.0f, Units = new List<Unit>(), 
                                      Color = DefaultTeamColors[idx]
             };
         }
         return Teams[idx];
+    }
+
+    public IEnumerable<Team> GetTeams()
+    {
+        return Teams.Values;
     }
 
     public interface IDamageable

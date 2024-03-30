@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using static Planet;
 
 public partial class Planet : Node3D
 {
@@ -94,33 +95,42 @@ public partial class Planet : Node3D
     }
 
     // Represents a modular grid of type T, which has moudlar (wraparound) characteristics.
-    public class Grid<T>
+    public class Grid<T> where T : new()
     {
         // Flat array of cells.
         protected T[] Cells;
+
+        public void Init()
+        {
+            for (int k = 0; k < Cells.Length; k++) {
+                Cells[k] = new T();
+            }
+        }
 
         public Grid(int numCells)
         {
             Cells = new T[numCells];
         }
 
-        public void Clear(T value)
+        public int WrapIndex(int idx)
         {
-            for (int k = 0; k < Cells.Length; k++) {
-                Cells[k] = value;
+            if (idx < 0) {
+                return (Cells.Length + idx % Cells.Length);
+            } else {
+                return idx % Cells.Length;
             }
         }
 
         // Gets the cell at the given index.
         public T Get(int idx)
         {
-            return Cells[idx % Cells.Length];
+            return Cells[WrapIndex(idx)];
         }
 
         // Sets the cell at the given index.
         public void Set(int idx, T cell)
         {
-            Cells[idx % Cells.Length] = cell;
+            Cells[WrapIndex(idx)] = cell;
         }
 
         // Indexing operator.
@@ -143,7 +153,7 @@ public partial class Planet : Node3D
     }
 
     // A modular grid that indexes via angle (or x, y).
-    public class AngleGrid<T> : Grid<T>
+    public class AngleGrid<T> : Grid<T> where T : new()
     {
         // Size of the grid cells in angle (radians).
         private float AngularResolution = 1.0f;
@@ -157,8 +167,7 @@ public partial class Planet : Node3D
         {           
             // -PI to PI.
             float wrapped = Mathf.Atan2(y, x);
-            // Rewrap from 0 to 2PI, then divide.
-            return (int)((wrapped + Mathf.Pi) / AngularResolution);
+            return WrapIndex((int)(wrapped / AngularResolution));
 
         }
 
@@ -176,7 +185,13 @@ public partial class Planet : Node3D
             // Angle is ambiguous over the range of indices, so return the angle that is half way through the angular grid cell.
             return index * AngularResolution + AngularResolution * 0.5f;
         }
-
+        
+        // Position at the index.
+        public Vector3 PositionOf(float radius, int index)
+        {
+            float angle = AngleOf(WrapIndex(index));
+            return new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0.0f);
+        }
 
         // Get the cell at the given x, y coordinate.
         public T Get(float x, float y)
@@ -199,7 +214,7 @@ public partial class Planet : Node3D
             int idx = IndexOf(x, y);
             for(int k = -count; k <= count; k++) {
                 if (includeCenter || k != 0) {
-                    yield return idx + k;
+                    yield return WrapIndex(idx + k);
                 }
             }
         }
@@ -212,18 +227,65 @@ public partial class Planet : Node3D
 
 
     [ExportGroup("Grids")]
-    [Export] private float buildingPlacementResolutionDegrees = 5;
-    public AngleGrid<OccupancyCell> BuildingOccupancyGrid;
+    [Export] private float gridResolutionDegrees = 5;
+    public AngleGrid<GridCell> PlanetGrid;
 
 
 
-    public struct OccupancyCell
+    public class GridCell
     {
-        public PlanetObject ObjectOccupyingCell = null;
+        public enum Layer
+        {
+            Buildings,
+            Units,
+            Resources
+        }
 
-        public bool IsOccupied { get { return ObjectOccupyingCell != null;  } }
+        public Dictionary<Layer, HashSet<Node3D>> Objects = null;
 
-        public OccupancyCell()
+        
+        public HashSet<Node3D> GetObjects(Layer layer)
+        {
+            if (Objects == null) {
+                return null;
+            }
+            if (!Objects.ContainsKey(layer)) {
+                return null;
+            }
+            return Objects[layer];
+        }
+
+        public bool HasAny(Layer layer)
+        {
+            HashSet<Node3D> objectsAtLayer = GetObjects(layer);
+            if (objectsAtLayer == null) {
+                return false;
+            }
+            return objectsAtLayer.Count > 0;
+        }
+
+        public void AddObject(Layer layer, Node3D planetObject)
+        {
+            if (Objects == null) {
+                Objects = new Dictionary<Layer, HashSet<Node3D>>();
+            }
+            if (!Objects.ContainsKey(layer)) {
+                Objects[layer] = new HashSet<Node3D>();
+            }
+            Objects[layer].Add(planetObject);
+        }
+
+        public bool RemoveObject(Layer layer, Node3D planetObject)
+        {
+            HashSet<Node3D> objectsAtLayer = GetObjects(layer);
+            if (objectsAtLayer == null) {
+                return false;
+            }
+            return objectsAtLayer.Remove(planetObject);
+        }
+
+
+        public GridCell()
         {
         }
     }
@@ -231,34 +293,61 @@ public partial class Planet : Node3D
     public override void _Ready()
     {
         base._Ready();
-        BuildingOccupancyGrid = new AngleGrid<OccupancyCell>(Mathf.DegToRad(buildingPlacementResolutionDegrees));
+        PlanetGrid = new AngleGrid<GridCell>(Mathf.DegToRad(gridResolutionDegrees));
+        PlanetGrid.Init();
     }
 
     public bool CanBuildBuilding(Vector3 location)
     {
-        return !BuildingOccupancyGrid.Get(location.X, location.Y).IsOccupied;
+        return !PlanetGrid.Get(location.X, location.Y).HasAny(GridCell.Layer.Buildings);
     }
 
     public void AddBuilding(PlanetObject building, Vector3 location, int numCells = 3)
     {
-        foreach (int idx in BuildingOccupancyGrid.GetAdjacentIndices(location.X, location.Y, numCells, true)) {
-            BuildingOccupancyGrid[idx] = new OccupancyCell { ObjectOccupyingCell = building };
-        }
-    }
-
-    public void RemoveBuilding( Vector3 location, int numCells = 3)
-    {
-        foreach (int idx in BuildingOccupancyGrid.GetAdjacentIndices(location.X, location.Y, numCells, true)) {
-            BuildingOccupancyGrid[idx] = new OccupancyCell { ObjectOccupyingCell = null };
-        }
+        AddObject(building, GridCell.Layer.Buildings, location, numCells);
     }
 
     public void RemoveBuilding(PlanetObject building)
     {
-        for (int x = 0; x < BuildingOccupancyGrid.Length(); x++) {
-            if (BuildingOccupancyGrid[x].ObjectOccupyingCell == building) {
-                BuildingOccupancyGrid[x] = new OccupancyCell { ObjectOccupyingCell = null };
-            }
+        RemoveObject(building, GridCell.Layer.Buildings);
+    }
+
+    public void AddUnit(Node3D unit, Vector3 location, int numCells = 3)
+    {
+        AddObject(unit, GridCell.Layer.Units, location, numCells);
+    }
+
+    public void RemoveUnit(Node3D unit)
+    {
+        RemoveObject(unit, GridCell.Layer.Units);
+    }
+    public void AddResource(Node3D resource, Vector3 location, int numCells = 3)
+    {
+        AddObject(resource, GridCell.Layer.Resources, location, numCells);
+    }
+
+    public void RemoveResource(Node3D resource)
+    {
+        RemoveObject(resource, GridCell.Layer.Resources);
+    }
+
+    public void AddObject(Node3D obj, GridCell.Layer layer,  Vector3 location, int numCells = 3)
+    {
+        foreach (int idx in PlanetGrid.GetAdjacentIndices(location.X, location.Y, numCells, true)) {
+            PlanetGrid[idx].AddObject(layer, obj);
         }
+    }
+
+    public void RemoveObject(Node3D obj, GridCell.Layer layer)
+    {
+        for (int x = 0; x < PlanetGrid.Length(); x++) {
+            PlanetGrid[x].RemoveObject(layer, obj);
+        }
+    }
+
+    public int GetGridIndexAt(Vector3 globalPosition)
+    {
+        Vector3 local = ToLocal(globalPosition);
+        return PlanetGrid.IndexOf(local.X, local.Y);
     }
 }
